@@ -21,11 +21,48 @@
  *
  */
 
-package com.harshalworks.businessbg;
+package com.harshalworks.businessbg.player;
 
-public interface Player {
+import com.harshalworks.businessbg.Player;
+import com.harshalworks.businessbg.dealers.CanTakeMoney;
 
-    int getMoneyValue();
+import java.util.Objects;
 
-    String getUniqueName();
+public class BoardGamePlayer implements Player, CanTakeMoney {
+
+    private int moneyValue;
+    private final String uniqueName;
+
+    public BoardGamePlayer(int moneyValue, String uniqueName) {
+        this.moneyValue = moneyValue;
+        this.uniqueName = uniqueName;
+    }
+
+    @Override
+    public int getMoneyValue() {
+        return moneyValue;
+    }
+
+    @Override
+    public String getUniqueName() {
+        return uniqueName;
+    }
+
+    @Override
+    public void addMoney(int amount) {
+        this.moneyValue += amount;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        BoardGamePlayer that = (BoardGamePlayer) o;
+        return uniqueName.equals(that.uniqueName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(uniqueName);
+    }
 }

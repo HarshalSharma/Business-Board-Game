@@ -21,11 +21,10 @@
  *
  */
 
-package com.harshalworks.businessbg;
+package com.harshalworks.businessbg.dice;
 
-public interface Player {
+public interface Dice {
 
-    int getMoneyValue();
+    int throwDice();
 
-    String getUniqueName();
 }
