@@ -21,11 +21,10 @@
  *
  */
 
-package com.harshalworks.businessbg;
+package com.harshalworks.businessbg.dealers;
 
-public interface Player {
+public interface CanTakeMoney {
 
-    int getMoneyValue();
+    void addMoney(int amount);
 
-    String getUniqueName();
 }

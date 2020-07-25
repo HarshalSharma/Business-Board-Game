@@ -23,9 +23,31 @@
 
 package com.harshalworks.businessbg;
 
-public interface Player {
+import org.junit.Before;
+import org.junit.Test;
 
-    int getMoneyValue();
+import static org.junit.Assert.assertEquals;
 
-    String getUniqueName();
+public class PlayerTest {
+
+    private Game game;
+
+    @Before
+    public void setup() {
+        game = new Game(TestConstants.START_PLAYER_AMOUNT, TestConstants.INITIAL_AMOUNT_OF_BANK);
+    }
+
+    @Test
+    public void playersShouldBeAbleToKnowTheirRegisteredName() {
+        //given
+        String expected = TestConstants.PLAYER_1;
+        Player player = null;
+
+        //when
+        player = game.registerPlayer(TestConstants.PLAYER_1);
+
+        //then
+        assertEquals(expected, player.getUniqueName());
+    }
+
 }

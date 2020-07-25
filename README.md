@@ -1,6 +1,6 @@
 ## Scope
 
-This Repository is supposed to be a standard **"Business Game *(see below)*"** with configure-able Rules for hotels or jails or something new which could be added in the classic board game.
+This Repository is supposed to be a standard **"Business Board Game *(see below)*"** with configure-able Rules for hotels or jails or something new which could be added in the classic board game.
 
 It would not have any UI or other user interaction mechanisms, though, client APIs would be provided, it is supposed to act as a library for exciting future projects or you might build something amazing on top of it as it's going to stay open-sourced. 😃️
 

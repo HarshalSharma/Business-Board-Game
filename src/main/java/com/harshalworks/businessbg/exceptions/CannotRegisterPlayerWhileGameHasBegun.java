@@ -21,11 +21,13 @@
  *
  */
 
-package com.harshalworks.businessbg;
+package com.harshalworks.businessbg.exceptions;
 
-public interface Player {
+public class CannotRegisterPlayerWhileGameHasBegun extends RuntimeException {
 
-    int getMoneyValue();
+    public static final String MESSAGE = "CANNOT REGISTER MORE PLAYERS, ONCE THE GAME HAS BEGUN.";
 
-    String getUniqueName();
+    public CannotRegisterPlayerWhileGameHasBegun() {
+        super(MESSAGE);
+    }
 }

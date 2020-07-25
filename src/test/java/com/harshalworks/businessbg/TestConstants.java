@@ -23,9 +23,9 @@
 
 package com.harshalworks.businessbg;
 
-public interface Player {
-
-    int getMoneyValue();
-
-    String getUniqueName();
+public class TestConstants {
+    public static final int START_PLAYER_AMOUNT = 1500;
+    public static final int INITIAL_AMOUNT_OF_BANK = 5000;
+    public static final String PLAYER_1 = "Player-1";
+    public static final String PLAYER_2 = "Player-2";
 }
