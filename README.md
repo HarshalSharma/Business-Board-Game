@@ -1,10 +1,12 @@
-##Scope
+## Scope
 
-This Repository is supposed to be standard Business Game with configure-able Rules for hotels or jails or something new in the classic board game.
+This Repository is supposed to be a standard **"Business Game *(see below)*"** with configure-able Rules for hotels or jails or something new which could be added in the classic board game.
 
 It would not have any UI or other user interaction mechanisms, though, client APIs would be provided, it is supposed to act as a library for exciting future projects or you might build something amazing on top it as it's going to stay open-sourced. 😃️
 
-Please don't forget to start it. 😍️😍️😍️
+Please don't forget to STAR🌟️ it, review it's code🗃️ and provide your feedback or open tickets for features.. 😍️😍️😍️
+
+*Also there would be blog series on TDD and Object Oriented Modelling starting along with it's development. commit by commit. at harshaloworks.com*
 
 ---
 ### About Business: Board Game
@@ -16,5 +18,4 @@ It is a board game where players roll two six-sided dice to move around the game
 
 
 ---
-#####P.S *open tickets for feature requests* 
 *More Documentation would be added over time.*
