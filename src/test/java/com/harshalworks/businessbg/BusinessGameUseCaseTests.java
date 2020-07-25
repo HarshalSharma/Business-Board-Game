@@ -40,7 +40,7 @@ public class BusinessGameUseCaseTests {
     }
 
     @Test
-    public void canNotStartAGameWithLessThan2UniquePlayers() {
+    public void canNotStartAGameWithLessThan2UniquePlayers(){
         //Given
         game.registerPlayer(TestConstants.PLAYER_1);
         game.registerPlayer(TestConstants.PLAYER_1);
@@ -64,7 +64,7 @@ public class BusinessGameUseCaseTests {
         //then
         assertTrue(game.isRunning());
     }
-    
+
     @Test(expected = CannotRegisterPlayerWhileGameHasBegun.class)
     public void cannotRegisterMorePlayersAfterStartingTheGame(){
         //Given
@@ -73,7 +73,7 @@ public class BusinessGameUseCaseTests {
 
         //when
         game.start();
-        
+
         //then
         game.registerPlayer("New Player");
     }
