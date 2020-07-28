@@ -24,9 +24,5 @@ jobs:
       run: chmod +x gradlew
     - name: Build with Gradle
       run: ./gradlew build
-    - name: SonarCloud Scan
-      uses: SonarSource/sonarcloud-github-action@v1.3
-      with:
-        # Set the sonar.projectBaseDir analysis property
-        projectBaseDir: . # optional, default is .
+
         
