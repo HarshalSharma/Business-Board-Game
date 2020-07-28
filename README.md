@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/HarshalSharma/Business-Board-Game.svg?branch=master)](https://travis-ci.org/HarshalSharma/Business-Board-Game)
+
 ## Scope
 
 This Repository is supposed to be a standard **"Business Board Game *(see below)*"** with configure-able Rules for hotels or jails or something new which could be added in the classic board game.
