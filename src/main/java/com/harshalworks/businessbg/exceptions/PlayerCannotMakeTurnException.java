@@ -21,10 +21,11 @@
  *
  */
 
-package com.harshalworks.businessbg.dice;
+package com.harshalworks.businessbg.exceptions;
 
-public interface Dice {
+public class PlayerCannotMakeTurnException extends RuntimeException {
 
-    int rollTheDice();
-
+    public PlayerCannotMakeTurnException(String MESSAGE) {
+        super(MESSAGE);
+    }
 }

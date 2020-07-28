@@ -21,10 +21,13 @@
  *
  */
 
-package com.harshalworks.businessbg.dice;
+package com.harshalworks.businessbg.exceptions;
 
-public interface Dice {
+public class CannotRegisterPlayerException extends RuntimeException {
 
-    int rollTheDice();
+    public static final String MESSAGE = "CANNOT REGISTER MORE PLAYER, %s";
 
+    public CannotRegisterPlayerException(String reason) {
+        super(String.format(MESSAGE, reason));
+    }
 }

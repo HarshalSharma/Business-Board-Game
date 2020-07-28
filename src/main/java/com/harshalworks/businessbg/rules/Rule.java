@@ -21,10 +21,8 @@
  *
  */
 
-package com.harshalworks.businessbg.dice;
+package com.harshalworks.businessbg.rules;
 
-public interface Dice {
-
-    int rollTheDice();
-
+public enum Rule {
+    NONE
 }

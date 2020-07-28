@@ -21,10 +21,17 @@
  *
  */
 
-package com.harshalworks.businessbg.dice;
+package com.harshalworks.businessbg.bank;
 
-public interface Dice {
+public class Bank {
 
-    int rollTheDice();
+    private int initialAmountOfBank;
 
+    public Bank(int initialAmountOfBank) {
+        this.initialAmountOfBank = initialAmountOfBank;
+    }
+
+    public int getAvailableAmount() {
+        return initialAmountOfBank;
+    }
 }

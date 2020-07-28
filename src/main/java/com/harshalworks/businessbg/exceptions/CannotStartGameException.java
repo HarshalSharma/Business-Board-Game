@@ -21,33 +21,12 @@
  *
  */
 
-package com.harshalworks.businessbg;
+package com.harshalworks.businessbg.exceptions;
 
-import org.junit.Before;
-import org.junit.Test;
+public class CannotStartGameException extends RuntimeException{
+    public static final String MESSAGE = "CANNOT START THE GAME, %s";
 
-import static org.junit.Assert.assertEquals;
-
-public class PlayerTest {
-
-    private Game game;
-
-    @Before
-    public void setup() {
-        game = new Game(TestConstants.START_PLAYER_AMOUNT, TestConstants.INITIAL_AMOUNT_OF_BANK);
+    public CannotStartGameException(String reason) {
+        super(String.format(MESSAGE, reason));
     }
-
-    @Test
-    public void playersShouldBeAbleToKnowTheirRegisteredName() {
-        //given
-        String expected = TestConstants.PLAYER_1;
-        Player player = null;
-
-        //when
-        player = game.registerPlayer(TestConstants.PLAYER_1);
-
-        //then
-        assertEquals(expected, player.getUniqueName());
-    }
-
 }

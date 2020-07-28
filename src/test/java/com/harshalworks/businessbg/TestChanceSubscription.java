@@ -21,10 +21,38 @@
  *
  */
 
-package com.harshalworks.businessbg.dice;
+package com.harshalworks.businessbg;
 
-public interface Dice {
+public class TestChanceSubscription implements ChanceSubscription{
 
-    int rollTheDice();
+    public transient static int EXE_SEQUENCE = 0;
+    int gotMyChance = 0;
+    int diceGotRolled = 0;
+    int chanceCompleted = 0;
+    int diceValue = 0;
+    int turnChanged = 0;
 
+    @Override
+    public void onMyChance() {
+        EXE_SEQUENCE++;
+        gotMyChance = EXE_SEQUENCE;
+    }
+
+    @Override
+    public void onAfterRollingDice(int diceValue) {
+        EXE_SEQUENCE++;
+        diceGotRolled++;
+        this.diceValue = diceValue;
+    }
+
+    @Override
+    public void onChanceCompleted() {
+        EXE_SEQUENCE++;
+        chanceCompleted++;
+    }
+
+    @Override
+    public void turnChanged() {
+        turnChanged++;
+    }
 }

@@ -28,12 +28,13 @@ import com.harshalworks.businessbg.dealers.CanTakeMoney;
 
 import java.util.Objects;
 
-public class BoardGamePlayer implements Player, CanTakeMoney {
+public class BoardGamePlayer implements Player {
 
     private int moneyValue;
     private final String uniqueName;
+    private int currentPosition;
 
-    public BoardGamePlayer(int moneyValue, String uniqueName) {
+    public BoardGamePlayer(final int moneyValue, final String uniqueName) {
         this.moneyValue = moneyValue;
         this.uniqueName = uniqueName;
     }
@@ -49,8 +50,8 @@ public class BoardGamePlayer implements Player, CanTakeMoney {
     }
 
     @Override
-    public void addMoney(int amount) {
-        this.moneyValue += amount;
+    public int getCurrentPosition() {
+        return currentPosition;
     }
 
     @Override
@@ -64,5 +65,9 @@ public class BoardGamePlayer implements Player, CanTakeMoney {
     @Override
     public int hashCode() {
         return Objects.hash(uniqueName);
+    }
+
+    public void setPosition(int position) {
+        this.currentPosition = position;
     }
 }

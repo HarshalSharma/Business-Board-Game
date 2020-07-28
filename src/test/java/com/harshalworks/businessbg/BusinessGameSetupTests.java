@@ -23,24 +23,26 @@
 
 package com.harshalworks.businessbg;
 
-import com.harshalworks.businessbg.dice.Dice;
-import com.harshalworks.businessbg.exceptions.CannotRegisterPlayerWhileGameHasBegun;
+import com.harshalworks.businessbg.exceptions.CannotRegisterPlayerException;
+import com.harshalworks.businessbg.exceptions.CannotStartGameException;
 import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-public class BusinessGameUseCaseTests {
+public class BusinessGameSetupTests {
 
     private Game game;
 
     @Before
     public void setup() {
-        game = new Game(TestConstants.START_PLAYER_AMOUNT, TestConstants.INITIAL_AMOUNT_OF_BANK);
+        game = new Game(TestConstants.START_PLAYER_AMOUNT,
+                TestConstants.INITIAL_AMOUNT_OF_BANK,
+                null, null);
     }
 
     @Test
-    public void canNotStartAGameWithLessThan2UniquePlayers(){
+    public void canNotStartAGameWithLessThan2UniquePlayers() {
         //Given
         game.registerPlayer(TestConstants.PLAYER_1);
         game.registerPlayer(TestConstants.PLAYER_1);
@@ -65,17 +67,30 @@ public class BusinessGameUseCaseTests {
         assertTrue(game.isRunning());
     }
 
-    @Test(expected = CannotRegisterPlayerWhileGameHasBegun.class)
-    public void cannotRegisterMorePlayersAfterStartingTheGame(){
+    @Test(expected = CannotStartGameException.class)
+    public void cannotStartAlreadyStartedGame(){
+        //given
+        game.registerPlayer(TestConstants.PLAYER_1);
+        game.registerPlayer(TestConstants.PLAYER_2);
+        game.start();;
+
+        //when
+        game.start();
+
+        //then expects to throw exception.
+    }
+
+    @Test(expected = CannotRegisterPlayerException.class)
+    public void cannotRegisterMorePlayersAfterStartingTheGame() {
         //Given
         game.registerPlayer(TestConstants.PLAYER_1);
         game.registerPlayer(TestConstants.PLAYER_2);
 
         //when
         game.start();
-
-        //then
         game.registerPlayer("New Player");
+
+        //then expects to throw exception.
     }
 
     @Test
@@ -94,14 +109,17 @@ public class BusinessGameUseCaseTests {
     }
 
     @Test
-    public void gameShouldHaveAFixedValueOfMoneyForEachPlayerOnStart(){
+    public void gameShouldHaveAFixedValueOfMoneyForEachPlayerOnStart() {
         //given
         int[] amounts = new int[]{1500, 10, 300};
         Player player = null;
 
         for (int i = 0; i < amounts.length; i++) {
             //when
-            game = new Game(amounts[i], 5000);
+            game = new Game(amounts[i],
+                    5000,
+                    null,
+                    null);
             player = game.registerPlayer(TestConstants.PLAYER_1);
 
             //then
@@ -110,20 +128,19 @@ public class BusinessGameUseCaseTests {
     }
 
     @Test
-    public void gameShouldHaveABankWithInitialMoney(){
+    public void gameShouldHaveABankWithInitialMoney() {
         //given
         int[] amounts = new int[]{100, 1055, 3010};
         for (int i = 0; i < amounts.length; i++) {
             //when
-            game = new Game(TestConstants.START_PLAYER_AMOUNT, amounts[i]);
+            game = new Game(TestConstants.START_PLAYER_AMOUNT,
+                    amounts[i],
+                    null,
+                    null);
 
             //then
             assertEquals(amounts[i], game.getBankMoneyValue());
         }
-    }
-
-    private Dice createATestableDice() {
-        return null;
     }
 
 

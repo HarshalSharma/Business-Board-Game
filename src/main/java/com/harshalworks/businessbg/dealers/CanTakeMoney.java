@@ -25,6 +25,6 @@ package com.harshalworks.businessbg.dealers;
 
 public interface CanTakeMoney {
 
-    void addMoney(int amount);
+    void addMoney(final int amount);
 
 }

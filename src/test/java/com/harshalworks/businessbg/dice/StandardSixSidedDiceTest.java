@@ -23,8 +23,30 @@
 
 package com.harshalworks.businessbg.dice;
 
-public interface Dice {
+import org.junit.Assert;
+import org.junit.Test;
 
-    int rollTheDice();
+import java.util.HashSet;
+import java.util.Set;
 
+public class StandardSixSidedDiceTest {
+
+    @Test
+    public void diceShouldRollOutRandomNumbersBetween1To6() {
+        //given
+        Dice dice = new StandardSixSidedDice();
+
+        //when
+        Set<Integer> set = new HashSet<>();
+        for (int i = 0; i < 10; i++) {
+            set.add(dice.rollTheDice());
+        }
+
+        //then
+        Assert.assertNotEquals(1, set.size());
+        for (int val : set) {
+            Assert.assertTrue(val > 0);
+            Assert.assertTrue(val < 7);
+        }
+    }
 }
