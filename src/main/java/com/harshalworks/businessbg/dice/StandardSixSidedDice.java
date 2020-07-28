@@ -23,8 +23,15 @@
 
 package com.harshalworks.businessbg.dice;
 
-public interface Dice {
+import java.util.Random;
 
-    int rollTheDice();
+public class StandardSixSidedDice implements Dice{
 
+    private static final Random RANDOM_GENERATOR = new Random();
+    public static final int DICE_SIDES = 6;
+
+    @Override
+    public int rollTheDice() {
+        return 1 + RANDOM_GENERATOR.nextInt(DICE_SIDES);
+    }
 }

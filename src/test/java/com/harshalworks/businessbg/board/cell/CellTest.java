@@ -21,13 +21,10 @@
  *
  */
 
-package com.harshalworks.businessbg.exceptions;
+package com.harshalworks.businessbg.board.cell;
 
-public class CannotRegisterPlayerWhileGameHasBegun extends RuntimeException {
+public class CellTest {
 
-    public static final String MESSAGE = "CANNOT REGISTER MORE PLAYERS, ONCE THE GAME HAS BEGUN.";
 
-    public CannotRegisterPlayerWhileGameHasBegun() {
-        super(MESSAGE);
-    }
+
 }

@@ -21,10 +21,12 @@
  *
  */
 
-package com.harshalworks.businessbg.dice;
+package com.harshalworks.businessbg.exceptions;
 
-public interface Dice {
+public class GameIsNotStartedException extends RuntimeException {
+    public static final String MESSAGE = "GAME IS NOT STARTED.";
 
-    int rollTheDice();
-
+    public GameIsNotStartedException() {
+        super(MESSAGE);
+    }
 }

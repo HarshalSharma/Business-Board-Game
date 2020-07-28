@@ -21,10 +21,12 @@
  *
  */
 
-package com.harshalworks.businessbg.dice;
+package com.harshalworks.businessbg.exceptions;
 
-public interface Dice {
+public class InvalidBoardPositionException extends RuntimeException {
+    public static final String MESSAGE = "INVALID POSITION %d FOR A BOARD OF SIZE %d";
 
-    int rollTheDice();
-
+    public InvalidBoardPositionException(int requestedPosition, int boardSize) {
+        super(String.format(MESSAGE,requestedPosition,boardSize));
+    }
 }

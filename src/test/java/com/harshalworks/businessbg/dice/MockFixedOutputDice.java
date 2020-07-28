@@ -23,8 +23,20 @@
 
 package com.harshalworks.businessbg.dice;
 
-public interface Dice {
+public class MockFixedOutputDice implements Dice {
 
-    int rollTheDice();
+    private int[] outputArray;
+    private int current = 0;
+
+    public MockFixedOutputDice(int[] outputArray) {
+        this.outputArray = outputArray;
+    }
+
+    @Override
+    public int rollTheDice() {
+        int out = outputArray[current];
+        current++;
+        return out;
+    }
 
 }

@@ -21,10 +21,16 @@
  *
  */
 
-package com.harshalworks.businessbg.dice;
+package com.harshalworks.businessbg;
 
-public interface Dice {
+public interface ChanceSubscription {
 
-    int rollTheDice();
+    void onMyChance();
+
+    void onAfterRollingDice(int diceValue);
+
+    void onChanceCompleted();
+
+    void turnChanged();
 
 }

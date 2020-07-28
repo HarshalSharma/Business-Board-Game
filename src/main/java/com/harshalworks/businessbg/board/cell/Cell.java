@@ -21,10 +21,19 @@
  *
  */
 
-package com.harshalworks.businessbg.dice;
+package com.harshalworks.businessbg.board.cell;
 
-public interface Dice {
+import com.harshalworks.businessbg.rules.Rule;
 
-    int rollTheDice();
+public class Cell{
 
+    private final Rule rule;
+
+    public Cell(Rule rule) {
+        this.rule = rule;
+    }
+
+    public Rule getRule() {
+        return rule;
+    }
 }

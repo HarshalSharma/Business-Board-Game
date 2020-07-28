@@ -23,39 +23,59 @@
 
 package com.harshalworks.businessbg;
 
-import com.harshalworks.businessbg.exceptions.CannotRegisterPlayerWhileGameHasBegun;
+import com.harshalworks.businessbg.bank.Bank;
+import com.harshalworks.businessbg.board.Board;
+import com.harshalworks.businessbg.board.cell.Cell;
+import com.harshalworks.businessbg.dice.Dice;
+import com.harshalworks.businessbg.exceptions.*;
 import com.harshalworks.businessbg.player.BoardGamePlayer;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 public class Game {
 
-    private Set<BoardGamePlayer> players = null;
+    private Set<BoardGamePlayer> uniquePlayers = null;
+    private final Queue<BoardGamePlayer> playersTurnOrder;
+    private BoardGamePlayer playerWithCurrentChance;
+    private final Dice dice;
+    private final Board board;
+    private final Bank bank;
+
     private boolean isRunning = false;
     private final int FIXED_START_AMOUNT_FOR_PLAYER;
-    private int bankAmount;
 
-    public Game(int fixedAmountForPlayer, int initialAmountOfBank) {
+    public Game(final int fixedAmountForPlayer, final int initialAmountOfBank, final Dice dice, final Board board) {
         this.FIXED_START_AMOUNT_FOR_PLAYER = fixedAmountForPlayer;
-        this.bankAmount = initialAmountOfBank;
-        this.players = new HashSet<>();
+        this.bank = new Bank(initialAmountOfBank);
+        this.dice = dice;
+        this.board = board;
+
+        this.uniquePlayers = new HashSet<>();
+        this.playersTurnOrder = new LinkedList<>();
     }
 
-    public Player registerPlayer(String uniqueName) {
+    public Player registerPlayer(final String uniqueName) {
         if (!isRunning) {
             BoardGamePlayer player = new BoardGamePlayer(FIXED_START_AMOUNT_FOR_PLAYER, uniqueName);
-            players.add(player);
+            if (uniquePlayers.add(player)) {
+                playersTurnOrder.add(player);
+            }
             return player;
         } else {
-            throw new CannotRegisterPlayerWhileGameHasBegun();
+            throw new CannotRegisterPlayerException(MessageConstants.WHEN_THE_GAME_HAS_ALREADY_STARTED);
         }
     }
 
     public void start() {
-        if (players.size() >= 2) {
+        synchronized (this) {
+            if (isRunning) {
+                throw new CannotStartGameException(MessageConstants.GAME_IS_ALREADY_RUNNING);
+            }
+        }
+        if (uniquePlayers.size() >= 2) {
             isRunning = true;
         }
+        playerWithCurrentChance = playersTurnOrder.poll();
     }
 
     public boolean isRunning() {
@@ -63,7 +83,43 @@ public class Game {
     }
 
     public int getBankMoneyValue() {
-        return bankAmount;
+        return bank.getAvailableAmount();
+    }
+
+    private void nextTurn() {
+        playersTurnOrder.add(playerWithCurrentChance);
+        playerWithCurrentChance = playersTurnOrder.poll();
+    }
+
+    public String getPlayerWithCurrentTurn() {
+        validateIfGameHasStarted();
+        return playerWithCurrentChance.getUniqueName();
+    }
+
+    private void validateIfGameHasStarted() {
+        if (!isRunning)
+            throw new GameIsNotStartedException();
+    }
+
+    public void makePlayerMove(Player player) {
+        validateIfGameHasStarted();
+        validateIfThisPlayerHaveTurn(player);
+
+        movePlayerAheadByAmount(playerWithCurrentChance, dice.rollTheDice());
+
+        nextTurn();
+    }
+
+    private void movePlayerAheadByAmount(BoardGamePlayer boardGamePlayer, int amount) {
+        int newPosition = boardGamePlayer.getCurrentPosition();
+        newPosition += amount;
+        newPosition %= board.getBoardLength();
+        boardGamePlayer.setPosition(newPosition);
+    }
+
+    private void validateIfThisPlayerHaveTurn(Player player) {
+        if (!playerWithCurrentChance.equals(player))
+            throw new PlayerCannotMakeTurnException(MessageConstants.TURNS_WHEN_IT_S_NOT_THEIR_CHANCE);
     }
 
 }

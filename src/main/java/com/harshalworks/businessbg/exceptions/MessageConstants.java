@@ -21,10 +21,16 @@
  *
  */
 
-package com.harshalworks.businessbg.dice;
+package com.harshalworks.businessbg.exceptions;
 
-public interface Dice {
+public interface MessageConstants  {
 
-    int rollTheDice();
+    String TURNS_WHEN_IT_S_NOT_THEIR_CHANCE = "PLAYERS CANNOT MAKE TURNS WHEN IT'S NOT THEIR CHANCE.";
+
+    String GAME_IS_ALREADY_RUNNING = "GAME IS ALREADY RUNNING.";
+
+    String WHEN_THE_GAME_HAS_ALREADY_STARTED = "WHEN THE GAME IS ALREADY STARTED.";
+
+    String GIVEN_BOARD_LENGTH_IS_ZERO = "GIVEN BOARD LENGTH IS ZERO.";
 
 }

@@ -28,4 +28,6 @@ public interface Player {
     int getMoneyValue();
 
     String getUniqueName();
+
+    int getCurrentPosition();
 }
