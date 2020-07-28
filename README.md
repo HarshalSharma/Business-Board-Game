@@ -1,4 +1,4 @@
-![Build](https://github.com/HarshalSharma/Business-Board-Game/workflows/Java%20CI%20with%20Gradle/badge.svg?branch=master)
+![Build and Test](https://github.com/HarshalSharma/Business-Board-Game/workflows/Build%20and%20Test/badge.svg)
 
 ## Scope
 
