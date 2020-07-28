@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/HarshalSharma/Business-Board-Game.svg?branch=master)](https://travis-ci.org/HarshalSharma/Business-Board-Game)
+![Build](https://github.com/HarshalSharma/Business-Board-Game/workflows/Java%20CI%20with%20Gradle/badge.svg?branch=master)
 
 ## Scope
 
