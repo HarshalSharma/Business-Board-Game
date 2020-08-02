@@ -23,15 +23,32 @@
 
 package com.harshalworks.businessbg.bank;
 
-public class Bank {
+import com.harshalworks.businessbg.dealers.MarketAssistant;
 
-    private int initialAmountOfBank;
+public class Bank implements MarketAssistant {
 
-    public Bank(int initialAmountOfBank) {
-        this.initialAmountOfBank = initialAmountOfBank;
+    private int bankMoneyValue;
+
+    public Bank(int initialBankAmount) {
+        this.bankMoneyValue = initialBankAmount;
     }
 
     public int getAvailableAmount() {
-        return initialAmountOfBank;
+        return bankMoneyValue;
+    }
+
+    @Override
+    public void addMoney(int amount) {
+        bankMoneyValue += amount;
+    }
+
+    @Override
+    public void deductMoney(int amount) {
+        bankMoneyValue -= amount;
+    }
+
+    @Override
+    public boolean haveAvailableAmount(int amount) {
+        return amount <= bankMoneyValue;
     }
 }

@@ -21,15 +21,11 @@
  *
  */
 
-package com.harshalworks.businessbg;
+package com.harshalworks.businessbg.exceptions;
 
-import com.harshalworks.businessbg.dealers.Spender;
+public class CannotPurchaseASoldCell extends RuntimeException {
 
-public interface Player extends Spender {
-
-    int getMoneyValue();
-
-    String getUniqueName();
-
-    int getCurrentPosition();
+    public CannotPurchaseASoldCell(String message) {
+        super(ExceptionMessageConstants.CANNOT_PURCHASE_SOLD_CELL + message);
+    }
 }

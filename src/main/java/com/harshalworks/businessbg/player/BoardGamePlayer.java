@@ -24,11 +24,13 @@
 package com.harshalworks.businessbg.player;
 
 import com.harshalworks.businessbg.Player;
-import com.harshalworks.businessbg.dealers.CanTakeMoney;
+import com.harshalworks.businessbg.dealers.MarketAssistant;
+import com.harshalworks.businessbg.dealers.Payee;
+import com.harshalworks.businessbg.dealers.Spender;
 
 import java.util.Objects;
 
-public class BoardGamePlayer implements Player {
+public class BoardGamePlayer implements Player, MarketAssistant {
 
     private int moneyValue;
     private final String uniqueName;
@@ -69,5 +71,20 @@ public class BoardGamePlayer implements Player {
 
     public void setPosition(int position) {
         this.currentPosition = position;
+    }
+
+    @Override
+    public void addMoney(int amount) {
+        moneyValue += amount;
+    }
+
+    @Override
+    public void deductMoney(int amount) {
+        moneyValue -= amount;
+    }
+
+    @Override
+    public boolean haveAvailableAmount(int amount) {
+        return moneyValue >= amount;
     }
 }

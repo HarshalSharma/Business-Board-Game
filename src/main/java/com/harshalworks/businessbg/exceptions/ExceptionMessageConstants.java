@@ -21,15 +21,19 @@
  *
  */
 
-package com.harshalworks.businessbg;
+package com.harshalworks.businessbg.exceptions;
 
-import com.harshalworks.businessbg.dealers.Spender;
+public interface ExceptionMessageConstants {
 
-public interface Player extends Spender {
+    String TURNS_WHEN_IT_S_NOT_THEIR_CHANCE = "PLAYERS CANNOT MAKE TURNS WHEN IT'S NOT THEIR CHANCE.";
 
-    int getMoneyValue();
+    String GAME_IS_ALREADY_RUNNING = "GAME IS ALREADY RUNNING.";
 
-    String getUniqueName();
+    String WHEN_THE_GAME_HAS_ALREADY_STARTED = "WHEN THE GAME IS ALREADY STARTED.";
 
-    int getCurrentPosition();
+    String GIVEN_BOARD_LENGTH_IS_ZERO = "GIVEN BOARD LENGTH IS ZERO.";
+
+    String NO_CELL_TYPE_DEFINED = "NO CELL TYPE IS DEFINED FOR THE GIVEN TYPE ";
+
+    String CANNOT_PURCHASE_SOLD_CELL = "CANNOT PURCHASE A SOLD CELL.";
 }

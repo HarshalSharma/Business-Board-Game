@@ -25,16 +25,28 @@ package com.harshalworks.businessbg;
 
 import com.harshalworks.businessbg.bank.Bank;
 import com.harshalworks.businessbg.board.Board;
-import com.harshalworks.businessbg.board.cell.Cell;
 import com.harshalworks.businessbg.dice.Dice;
 import com.harshalworks.businessbg.exceptions.*;
 import com.harshalworks.businessbg.player.BoardGamePlayer;
+import com.harshalworks.businessbg.rules.Rule;
 
 import java.util.*;
 
+/**
+ *
+ * The main Business Board game.
+ *
+ * responsibilities:
+ * 1. context - stores the object reference for board, bank, players, queue of the game.
+ * 2. starts the game and reports the running status of the game.
+ * 3. changes turns
+ * 4. registers players.
+ * 5. handles requests from players to make their moves.
+ * 6. tells about the money in the bank or with some players.
+ */
 public class Game {
 
-    private Set<BoardGamePlayer> uniquePlayers = null;
+    private Set<BoardGamePlayer> uniquePlayers;
     private final Queue<BoardGamePlayer> playersTurnOrder;
     private BoardGamePlayer playerWithCurrentChance;
     private final Dice dice;
@@ -62,14 +74,14 @@ public class Game {
             }
             return player;
         } else {
-            throw new CannotRegisterPlayerException(MessageConstants.WHEN_THE_GAME_HAS_ALREADY_STARTED);
+            throw new CannotRegisterPlayerException(ExceptionMessageConstants.WHEN_THE_GAME_HAS_ALREADY_STARTED);
         }
     }
 
     public void start() {
         synchronized (this) {
             if (isRunning) {
-                throw new CannotStartGameException(MessageConstants.GAME_IS_ALREADY_RUNNING);
+                throw new CannotStartGameException(ExceptionMessageConstants.GAME_IS_ALREADY_RUNNING);
             }
         }
         if (uniquePlayers.size() >= 2) {
@@ -107,7 +119,26 @@ public class Game {
 
         movePlayerAheadByAmount(playerWithCurrentChance, dice.rollTheDice());
 
+        applyRuleAtCurrentPosition(playerWithCurrentChance);
+
         nextTurn();
+    }
+
+    /**
+     * Apply rules on the player based on their current position on the board.
+     *
+     * @param player the player currently being evaluated.
+     */
+    private void applyRuleAtCurrentPosition(BoardGamePlayer player) {
+        //get the rules applicable on the board at current position.
+        Rule rule = getRuleforCurrentPosition(player);
+
+        // apply these rules to the player.
+        rule.execute(player, bank);
+    }
+
+    private Rule getRuleforCurrentPosition(BoardGamePlayer player) {
+        return board.getRule(player.getCurrentPosition());
     }
 
     private void movePlayerAheadByAmount(BoardGamePlayer boardGamePlayer, int amount) {
@@ -119,7 +150,7 @@ public class Game {
 
     private void validateIfThisPlayerHaveTurn(Player player) {
         if (!playerWithCurrentChance.equals(player))
-            throw new PlayerCannotMakeTurnException(MessageConstants.TURNS_WHEN_IT_S_NOT_THEIR_CHANCE);
+            throw new PlayerCannotMakeTurnException(ExceptionMessageConstants.TURNS_WHEN_IT_S_NOT_THEIR_CHANCE);
     }
 
 }

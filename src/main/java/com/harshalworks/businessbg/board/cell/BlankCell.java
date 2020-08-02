@@ -21,16 +21,23 @@
  *
  */
 
-package com.harshalworks.businessbg.exceptions;
+package com.harshalworks.businessbg.board.cell;
 
-public interface MessageConstants  {
+import com.harshalworks.businessbg.dealers.MarketAssistant;
+import com.harshalworks.businessbg.player.BoardGamePlayer;
 
-    String TURNS_WHEN_IT_S_NOT_THEIR_CHANCE = "PLAYERS CANNOT MAKE TURNS WHEN IT'S NOT THEIR CHANCE.";
+/**
+ * Blank cell represents that this cell apply no rules to the player.
+ *
+ * Is violation interface segregation principle?
+ * My view is that it's not, because not doing anything when asked is it's functionality.
+ * No other interfaces are forced to implement.
+ */
+public class BlankCell extends Cell{
 
-    String GAME_IS_ALREADY_RUNNING = "GAME IS ALREADY RUNNING.";
-
-    String WHEN_THE_GAME_HAS_ALREADY_STARTED = "WHEN THE GAME IS ALREADY STARTED.";
-
-    String GIVEN_BOARD_LENGTH_IS_ZERO = "GIVEN BOARD LENGTH IS ZERO.";
-
+    @Override
+    public void execute(BoardGamePlayer player, MarketAssistant bank) {
+        //Intentionally left blank to represent that this cell does nothing.
+        //Have some better approach? Please raise the change with PR.
+    }
 }

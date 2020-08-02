@@ -21,15 +21,10 @@
  *
  */
 
-package com.harshalworks.businessbg;
+package com.harshalworks.businessbg.board.cell;
 
-import com.harshalworks.businessbg.dealers.Spender;
+public interface CellPropertiesProvider {
 
-public interface Player extends Spender {
+    Object getPropertiesForType(String cellType);
 
-    int getMoneyValue();
-
-    String getUniqueName();
-
-    int getCurrentPosition();
 }

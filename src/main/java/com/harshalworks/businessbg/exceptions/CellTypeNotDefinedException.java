@@ -21,15 +21,11 @@
  *
  */
 
-package com.harshalworks.businessbg;
+package com.harshalworks.businessbg.exceptions;
 
-import com.harshalworks.businessbg.dealers.Spender;
+public class CellTypeNotDefinedException extends RuntimeException {
 
-public interface Player extends Spender {
-
-    int getMoneyValue();
-
-    String getUniqueName();
-
-    int getCurrentPosition();
+    public CellTypeNotDefinedException(String type) {
+        super(String.format(ExceptionMessageConstants.NO_CELL_TYPE_DEFINED + " %s.", type));
+    }
 }

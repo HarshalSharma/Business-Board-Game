@@ -23,6 +23,20 @@
 
 package com.harshalworks.businessbg.rules;
 
-public enum Rule {
-    NONE
+import com.harshalworks.businessbg.dealers.MarketAssistant;
+import com.harshalworks.businessbg.player.BoardGamePlayer;
+
+/**
+ * Acts as an command interface for the different Rules that could be implemented
+ * through this API defination.
+ *
+ * However, I am concerned that arguments to execute are subject to might change in future
+ * to support more of the rules of the game.
+ * Have better ideas to implement or solve this? RAISE PR and show your support.
+ *
+ */
+public interface Rule {
+
+    void execute(BoardGamePlayer player, MarketAssistant bank);
+
 }

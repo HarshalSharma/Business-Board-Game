@@ -21,10 +21,22 @@
  *
  */
 
-package com.harshalworks.businessbg.dealers;
+package com.harshalworks.businessbg.board.cell;
 
-public interface CanTakeMoney {
+import com.harshalworks.businessbg.dealers.MarketAssistant;
+import com.harshalworks.businessbg.player.BoardGamePlayer;
 
-    void addMoney(final int amount);
+public class BankRewardCell extends Cell {
 
+    private final int rewardAmount;
+
+    public BankRewardCell(final int rewardAmount) {
+        this.rewardAmount = rewardAmount;
+    }
+
+    @Override
+    public void execute(BoardGamePlayer player, MarketAssistant bank) {
+        player.addMoney(rewardAmount);
+        bank.deductMoney(rewardAmount);
+    }
 }

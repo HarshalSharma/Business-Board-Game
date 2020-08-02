@@ -23,38 +23,48 @@
 
 package com.harshalworks.businessbg.board;
 
+import com.harshalworks.businessbg.board.cell.BlankCell;
 import com.harshalworks.businessbg.board.cell.Cell;
 import com.harshalworks.businessbg.exceptions.CannotInitializeBoardException;
+import com.harshalworks.businessbg.exceptions.ExceptionMessageConstants;
 import com.harshalworks.businessbg.exceptions.InvalidBoardPositionException;
-import com.harshalworks.businessbg.exceptions.MessageConstants;
 import com.harshalworks.businessbg.rules.Rule;
 
 public class Board {
 
-    private final Cell[] cells;
+    private final Cell[] boardPath;
 
-    public Board(final Cell[] cells) {
-        validateBoardLengthIsNonZero(cells);
-
-        this.cells = cells;
+    public Board(Cell[] boardCellsPath) {
+        validateBoardLengthIsNonZero(boardCellsPath);
+        boardPath = boardCellsPath;
     }
 
     private void validateBoardLengthIsNonZero(Cell[] cells) {
         if(cells == null || cells.length == 0)
-            throw new CannotInitializeBoardException(MessageConstants.GIVEN_BOARD_LENGTH_IS_ZERO);
+            throw new CannotInitializeBoardException(ExceptionMessageConstants.GIVEN_BOARD_LENGTH_IS_ZERO);
     }
 
     public int getBoardLength() {
-        return cells.length;
+        return boardPath.length;
     }
 
-    public Rule getCellRule(int position) {
+    /**
+     * Get the rule/command applicable at the this position.
+     *
+     * @param position position of cell on the board.
+     * @return Rule / Command applicable to players at this cell.
+     */
+    public Rule getRule(int position) {
         Rule rule;
         try{
-            rule = cells[position].getRule();
+            rule = boardPath[position];
         }catch (ArrayIndexOutOfBoundsException e){
-            throw new InvalidBoardPositionException(position, cells.length);
+            throw new InvalidBoardPositionException(position, boardPath.length);
         }
+
+        if(rule == null)
+            return new BlankCell();
+
         return rule;
     }
 }

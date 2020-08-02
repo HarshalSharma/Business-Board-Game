@@ -21,15 +21,28 @@
  *
  */
 
-package com.harshalworks.businessbg;
+package com.harshalworks.businessbg.board.cell;
 
-import com.harshalworks.businessbg.dealers.Spender;
+import com.harshalworks.businessbg.dealers.MarketAssistant;
+import com.harshalworks.businessbg.player.BoardGamePlayer;
 
-public interface Player extends Spender {
+/**
+ *
+ * When any player lands on the jail cell on the board they need to pay an amount to the bank.
+ *
+ * Acting as a reciever for the Rules
+ */
+public class PayToBankCell extends Cell {
 
-    int getMoneyValue();
+    private final int amount;
 
-    String getUniqueName();
+    public PayToBankCell(final int amount) {
+        this.amount = amount;
+    }
 
-    int getCurrentPosition();
+    @Override
+    public void execute(BoardGamePlayer player, MarketAssistant bank) {
+        bank.addMoney(amount);
+        player.deductMoney(amount);
+    }
 }

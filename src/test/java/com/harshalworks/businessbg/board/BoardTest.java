@@ -23,6 +23,7 @@
 
 package com.harshalworks.businessbg.board;
 
+import com.harshalworks.businessbg.board.cell.BlankCell;
 import com.harshalworks.businessbg.board.cell.Cell;
 import com.harshalworks.businessbg.exceptions.CannotInitializeBoardException;
 import com.harshalworks.businessbg.exceptions.InvalidBoardPositionException;
@@ -45,19 +46,19 @@ public class BoardTest {
     }
 
     @Test
-    public void boardShouldBeInitializedWithRuledCells() {
+    public void boardShouldBeInitializedWithBlankRuledCellsIfEmptyTypeProvided() {
         //given
-        Rule expected = Rule.NONE;
-        Cell[] boardCells = new Cell[]{new Cell(expected)};
+        Cell[] boardCells = new Cell[1];
         Board board = new Board(boardCells);
         int position = 0;
 
         //when
-        Rule actual = board.getCellRule(position);
+        Rule actual = board.getRule(position);
 
         //then
-        Assert.assertEquals(expected, actual);
+        Assert.assertTrue(actual instanceof BlankCell);
     }
+
 
     @Test(expected = InvalidBoardPositionException.class)
     public void boardShouldAcceptCallsToNonNegativePositionsOnly(){
@@ -67,7 +68,7 @@ public class BoardTest {
 
         //when
         int position = -2;
-        board.getCellRule(position);
+        board.getRule(position);
 
         //expect invalid board position
     }
@@ -80,7 +81,7 @@ public class BoardTest {
 
         //when
         int position = 6;
-        board.getCellRule(position);
+        board.getRule(position);
 
         //expect invalid board position
     }

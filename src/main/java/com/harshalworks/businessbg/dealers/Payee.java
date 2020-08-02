@@ -21,15 +21,10 @@
  *
  */
 
-package com.harshalworks.businessbg;
+package com.harshalworks.businessbg.dealers;
 
-import com.harshalworks.businessbg.dealers.Spender;
+public interface Payee {
 
-public interface Player extends Spender {
+    void addMoney(int amount);
 
-    int getMoneyValue();
-
-    String getUniqueName();
-
-    int getCurrentPosition();
 }

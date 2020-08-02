@@ -21,15 +21,40 @@
  *
  */
 
-package com.harshalworks.businessbg;
+package com.harshalworks.businessbg.board.cell;
 
-import com.harshalworks.businessbg.dealers.Spender;
+import java.util.Objects;
 
-public interface Player extends Spender {
+public class RentableMemberbership {
 
-    int getMoneyValue();
+    private String name;
+    private int cost;
+    private int rent;
 
-    String getUniqueName();
+    public RentableMemberbership(String name, int cost, int rent) {
+        this.name = name;
+        this.cost = cost;
+        this.rent = rent;
+    }
 
-    int getCurrentPosition();
+    public String getName() {
+        return name;
+    }
+
+    public int getCost() {
+        return cost;
+    }
+
+    public int getRent() {
+        return rent;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        RentableMemberbership that = (RentableMemberbership) o;
+        return name.equals(that.name);
+    }
 }
+

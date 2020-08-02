@@ -21,15 +21,23 @@
  *
  */
 
-package com.harshalworks.businessbg;
+package com.harshalworks.businessbg.bank;
 
-import com.harshalworks.businessbg.dealers.Spender;
+import com.harshalworks.businessbg.TestConstants;
+import org.junit.Assert;
+import org.junit.Test;
 
-public interface Player extends Spender {
+public class BankTest {
 
-    int getMoneyValue();
+    @Test
+    public void bankShouldReportIfItHaveTheMoney(){
+        //given
+        Bank bank = new Bank(TestConstants.INITIAL_AMOUNT_OF_BANK);
 
-    String getUniqueName();
+        //when - then
+        Assert.assertFalse(bank.haveAvailableAmount(TestConstants.INITIAL_AMOUNT_OF_BANK + 1));
+        Assert.assertTrue(bank.haveAvailableAmount(TestConstants.INITIAL_AMOUNT_OF_BANK));
 
-    int getCurrentPosition();
+    }
+
 }
