@@ -21,15 +21,17 @@
  *
  */
 
-package com.harshalworks.businessbg;
+package com.harshalworks.businessbg.dealers;
 
+import com.harshalworks.businessbg.dealers.Payee;
 import com.harshalworks.businessbg.dealers.Spender;
 
-public interface Player extends Spender {
-
-    int getMoneyValue();
-
-    String getUniqueName();
-
-    int getCurrentPosition();
+/**
+ *
+ * Market Assistant acts as a broker between third parties and implementer
+ * to pay money and receive money.
+ * Also, ask the implementor if they have the available amount required for purchase.
+ */
+public interface MarketAssistant extends Payee, Spender {
+    boolean haveAvailableAmount(int amount);
 }

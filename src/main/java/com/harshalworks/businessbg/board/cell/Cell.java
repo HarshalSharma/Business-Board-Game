@@ -25,15 +25,5 @@ package com.harshalworks.businessbg.board.cell;
 
 import com.harshalworks.businessbg.rules.Rule;
 
-public class Cell{
-
-    private final Rule rule;
-
-    public Cell(Rule rule) {
-        this.rule = rule;
-    }
-
-    public Rule getRule() {
-        return rule;
-    }
+public abstract class Cell implements Rule{
 }

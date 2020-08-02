@@ -21,15 +21,25 @@
  *
  */
 
-package com.harshalworks.businessbg;
+package com.harshalworks.businessbg.board.cell;
 
-import com.harshalworks.businessbg.dealers.Spender;
+public abstract class BoardCellFactory {
 
-public interface Player extends Spender {
+    protected CellPropertiesProvider cellProperties;
 
-    int getMoneyValue();
+    public BoardCellFactory(CellPropertiesProvider cellProperties) {
+        this.cellProperties = cellProperties;
+    }
 
-    String getUniqueName();
+    public Cell createCell(String cellType) {
+        if (isBlankCell(cellType)) return new BlankCell();
 
-    int getCurrentPosition();
+        return buildCell(cellType);
+    }
+
+    protected boolean isBlankCell(String cell) {
+        return cell == null || cell.equals("");
+    }
+
+    protected abstract Cell buildCell(String type);
 }

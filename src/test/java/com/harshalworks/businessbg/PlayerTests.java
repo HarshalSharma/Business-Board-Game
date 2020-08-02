@@ -43,7 +43,7 @@ public class PlayerTests {
     public void playersShouldBeAbleToKnowTheirRegisteredName() {
         //given
         String expected = TestConstants.PLAYER_1;
-        Player player = null;
+        Player player;
 
         //when
         player = game.registerPlayer(TestConstants.PLAYER_1);
@@ -52,10 +52,6 @@ public class PlayerTests {
         assertEquals(expected, player.getUniqueName());
     }
 
-    @Test
-    public void gameShouldNotAllowPlayersToMakeMoveWhenItsNotTheirChance(){
-
-    }
 
     /*@Test
     public void gameShouldNotStartAnyTurnBeforeStartCalled(){

@@ -24,13 +24,13 @@
 package com.harshalworks.businessbg;
 
 import com.harshalworks.businessbg.board.Board;
+import com.harshalworks.businessbg.board.cell.BlankCell;
 import com.harshalworks.businessbg.board.cell.Cell;
 import com.harshalworks.businessbg.dice.Dice;
 import com.harshalworks.businessbg.dice.MockFixedOutputDice;
 import com.harshalworks.businessbg.dice.StandardSixSidedDice;
 import com.harshalworks.businessbg.exceptions.GameIsNotStartedException;
 import com.harshalworks.businessbg.exceptions.PlayerCannotMakeTurnException;
-import com.harshalworks.businessbg.rules.Rule;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -43,10 +43,19 @@ public class GameTest {
 
     @Before
     public void setup() {
+        Cell[] cellPath = createBlankCellPath(10);
         game = new Game(TestConstants.START_PLAYER_AMOUNT,
                 TestConstants.INITIAL_AMOUNT_OF_BANK,
                 new StandardSixSidedDice(),
-                new Board(new Cell[10]));
+                new Board(cellPath));
+    }
+
+    protected Cell[] createBlankCellPath(int length) {
+        Cell[] cellPath = new Cell[length];
+        for (int i = 0; i < cellPath.length; i++) {
+            cellPath[i] = new BlankCell();
+        }
+        return cellPath;
     }
 
     @Test
@@ -131,9 +140,9 @@ public class GameTest {
     public void playersShouldRepeatFromCell1WhenReachedBeyondProvidedBoardLength() {
         //given
         int BOARD_LENGTH = 16;
-        int diceOutput[] = setupDiceOutput(10);
+        int[] diceOutput = setupDiceOutput(10);
         game = new Game(TestConstants.START_PLAYER_AMOUNT, TestConstants.INITIAL_AMOUNT_OF_BANK,
-                new MockFixedOutputDice(diceOutput), new Board(new Cell[BOARD_LENGTH]));
+                new MockFixedOutputDice(diceOutput), new Board(createBlankCellPath(BOARD_LENGTH)));
         Player player1 = game.registerPlayer(TestConstants.PLAYER_1);
         Player player2 = game.registerPlayer(TestConstants.PLAYER_2);
         game.start();
@@ -157,8 +166,7 @@ public class GameTest {
         Dice customDice = new MockFixedOutputDice(diceOutput);
         game = new Game(TestConstants.START_PLAYER_AMOUNT,
                 TestConstants.INITIAL_AMOUNT_OF_BANK,
-                customDice,
-                new Board(new Cell[boardLength]));
+                customDice, new Board(createBlankCellPath(boardLength)));
         Player player1 = game.registerPlayer(TestConstants.PLAYER_1);
         Player player2 = game.registerPlayer(TestConstants.PLAYER_2);
 
@@ -186,49 +194,13 @@ public class GameTest {
         }
     }
 
-    @Test
-    public void onReachingPayToBankCell_GameShouldMakePlayerPayToBank(){
-        //given
-        Player player1 = setupGameForRule(new Cell(Rule.NONE));
-
-        //when
-        game.makePlayerMove(player1);
-
-        //then
-//        Assert.assertEquals(TestConstants.START_PLAYER_AMOUNT - rule.getCharges(),
-//                player1.getMoneyValue());
-//        Assert.assertEquals(TestConstants.INITIAL_AMOUNT_OF_BANK + rule.getCharges(),
-//                game.getBankMoneyValue());
-    }
-
-    private Player setupGameForRule(Cell cellWithRule) {
-        game = new Game(TestConstants.START_PLAYER_AMOUNT,
-                TestConstants.START_PLAYER_AMOUNT ,
-                new MockFixedOutputDice(new int[]{1}),
-                new Board(new Cell[]{ cellWithRule }));
-        Player player1 = game.registerPlayer(TestConstants.PLAYER_1);
-        game.registerPlayer(TestConstants.PLAYER_2);
-        game.start();
-        return player1;
-    }
-
-    @Test
-    public void onReachingRewardToPlayerCell_GameShouldMakeBankPayToPlayer(){
-
-    }
-
-    @Test
-    public void onReachingPayRentCell_GameShouldMakePlayerPayToOwner(){
-
-    }
-
     private void expectCurrentPosition(Player player1, int expected) {
         Assert.assertEquals(expected, player1.getCurrentPosition());
     }
 
     private int[] setupDiceOutput(int length) {
         Random random = new Random();
-        int out[] = new int[length];
+        int[] out = new int[length];
         for (int i = 0; i < out.length; i++) {
             out[i] = getRandomDiceValue(random);
         }
