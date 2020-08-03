@@ -21,36 +21,24 @@
  *
  */
 
-package com.harshalworks.businessbg;
+package com.harshalworks.businessbg.events;
 
-import com.harshalworks.businessbg.player.Player;
-import org.junit.Before;
-import org.junit.Test;
+public class GameEvent {
 
-import static org.junit.Assert.assertEquals;
+    private String type;
+    private String eventMessage;
 
-public class PlayerTests {
-
-    private Game game;
-
-    @Before
-    public void setup() {
-        game = new Game(TestConstants.START_PLAYER_AMOUNT,
-                TestConstants.INITIAL_AMOUNT_OF_BANK,
-                null, null);
+    public GameEvent(String type, String eventMessage) {
+        this.eventMessage = eventMessage;
+        this.type = type;
     }
 
-    @Test
-    public void playersShouldBeAbleToKnowTheirRegisteredName() {
-        //given
-        String expected = TestConstants.PLAYER_1;
-        Player player;
+    public String getEventMessage() {
+        return eventMessage;
+    }
 
-        //when
-        player = game.registerPlayer(TestConstants.PLAYER_1);
-
-        //then
-        assertEquals(expected, player.getUniqueName());
+    public String getType() {
+        return type;
     }
 
 }

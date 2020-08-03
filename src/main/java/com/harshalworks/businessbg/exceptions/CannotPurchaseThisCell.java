@@ -21,36 +21,11 @@
  *
  */
 
-package com.harshalworks.businessbg;
+package com.harshalworks.businessbg.exceptions;
 
-import com.harshalworks.businessbg.player.Player;
-import org.junit.Before;
-import org.junit.Test;
+public class CannotPurchaseThisCell extends RuntimeException {
 
-import static org.junit.Assert.assertEquals;
-
-public class PlayerTests {
-
-    private Game game;
-
-    @Before
-    public void setup() {
-        game = new Game(TestConstants.START_PLAYER_AMOUNT,
-                TestConstants.INITIAL_AMOUNT_OF_BANK,
-                null, null);
+    public CannotPurchaseThisCell(String message) {
+        super(ExceptionMessageConstants.CANNOT_PURCHASE_CELL + message);
     }
-
-    @Test
-    public void playersShouldBeAbleToKnowTheirRegisteredName() {
-        //given
-        String expected = TestConstants.PLAYER_1;
-        Player player;
-
-        //when
-        player = game.registerPlayer(TestConstants.PLAYER_1);
-
-        //then
-        assertEquals(expected, player.getUniqueName());
-    }
-
 }

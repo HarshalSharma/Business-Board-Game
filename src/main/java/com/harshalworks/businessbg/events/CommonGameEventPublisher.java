@@ -21,36 +21,27 @@
  *
  */
 
-package com.harshalworks.businessbg;
+package com.harshalworks.businessbg.events;
 
-import com.harshalworks.businessbg.player.Player;
-import org.junit.Before;
-import org.junit.Test;
+import java.util.ArrayList;
+import java.util.List;
 
-import static org.junit.Assert.assertEquals;
+public class CommonGameEventPublisher implements GameEventPublisher {
 
-public class PlayerTests {
+    private List<Viewer> viewersList;
 
-    private Game game;
-
-    @Before
-    public void setup() {
-        game = new Game(TestConstants.START_PLAYER_AMOUNT,
-                TestConstants.INITIAL_AMOUNT_OF_BANK,
-                null, null);
+    public CommonGameEventPublisher() {
+        this.viewersList = new ArrayList<>();
     }
 
-    @Test
-    public void playersShouldBeAbleToKnowTheirRegisteredName() {
-        //given
-        String expected = TestConstants.PLAYER_1;
-        Player player;
+    @Override
+    public void publishEvent(GameEvent event) {
+        viewersList.forEach(viewer -> viewer.notify(event));
+    }
 
-        //when
-        player = game.registerPlayer(TestConstants.PLAYER_1);
-
-        //then
-        assertEquals(expected, player.getUniqueName());
+    @Override
+    public void addSubscriber(Viewer viewer) {
+        viewersList.add(viewer);
     }
 
 }

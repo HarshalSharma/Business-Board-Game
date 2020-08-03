@@ -25,7 +25,7 @@ package com.harshalworks.businessbg.board.cell;
 
 import com.harshalworks.businessbg.dealers.MarketAssistant;
 import com.harshalworks.businessbg.dealers.Payee;
-import com.harshalworks.businessbg.exceptions.CannotPurchaseASoldCell;
+import com.harshalworks.businessbg.exceptions.CannotPurchaseThisCell;
 import com.harshalworks.businessbg.player.BoardGamePlayer;
 
 public class RentableCell extends Cell {
@@ -40,6 +40,12 @@ public class RentableCell extends Cell {
 
     @Override
     public void execute(BoardGamePlayer player, MarketAssistant bank) {
+        if(owner!=null) {
+            payRent(player);
+        }
+    }
+
+    protected void payRent(BoardGamePlayer player) {
         int rent = rentableMemberberships[membershipStatus].getRent();
         owner.addMoney(rent);
         player.deductMoney(rent);
@@ -51,7 +57,7 @@ public class RentableCell extends Cell {
 
     public void purchase(MarketAssistant customer) {
         if(this.owner != null)
-            throw new CannotPurchaseASoldCell("");
+            throw new CannotPurchaseThisCell("");
 
         this.owner = customer;
         customer.deductMoney(rentableMemberberships[0].getCost());
@@ -59,7 +65,7 @@ public class RentableCell extends Cell {
 
     public boolean upgradeMembership(MarketAssistant customer) {
         if(customer != owner)
-            throw new CannotPurchaseASoldCell("Upgrade not allowed.");
+            throw new CannotPurchaseThisCell("Upgrade not allowed.");
 
         if(checkIfUpgradePossible())
             return false;

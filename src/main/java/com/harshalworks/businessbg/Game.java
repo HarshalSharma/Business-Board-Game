@@ -26,8 +26,13 @@ package com.harshalworks.businessbg;
 import com.harshalworks.businessbg.bank.Bank;
 import com.harshalworks.businessbg.board.Board;
 import com.harshalworks.businessbg.dice.Dice;
+import com.harshalworks.businessbg.events.CommonGameEventPublisher;
+import com.harshalworks.businessbg.events.GameEvent;
+import com.harshalworks.businessbg.events.GameEventPublisher;
+import com.harshalworks.businessbg.events.Viewer;
 import com.harshalworks.businessbg.exceptions.*;
 import com.harshalworks.businessbg.player.BoardGamePlayer;
+import com.harshalworks.businessbg.player.Player;
 import com.harshalworks.businessbg.rules.Rule;
 
 import java.util.*;
@@ -46,31 +51,40 @@ import java.util.*;
  */
 public class Game {
 
-    private Set<BoardGamePlayer> uniquePlayers;
+    protected final static int GAME_STATE_WAITING = 0;
+    protected final static int GAME_STATE_RUNNING = 1;
+    protected final static int GAME_STATE_FINISHED = 2;
+
+    private Map<String, BoardGamePlayer> uniquePlayers;
     private final Queue<BoardGamePlayer> playersTurnOrder;
     private BoardGamePlayer playerWithCurrentChance;
     private final Dice dice;
     private final Board board;
     private final Bank bank;
+    private final GameEventPublisher gameEventPublisher;
 
-    private boolean isRunning = false;
+    private int gameState = GAME_STATE_WAITING;
     private final int FIXED_START_AMOUNT_FOR_PLAYER;
 
-    public Game(final int fixedAmountForPlayer, final int initialAmountOfBank, final Dice dice, final Board board) {
+    public Game(final int fixedAmountForPlayer, final int initialAmountOfBank,
+                final Dice dice, final Board board) {
         this.FIXED_START_AMOUNT_FOR_PLAYER = fixedAmountForPlayer;
         this.bank = new Bank(initialAmountOfBank);
         this.dice = dice;
         this.board = board;
 
-        this.uniquePlayers = new HashSet<>();
+        this.uniquePlayers = new HashMap<>();
         this.playersTurnOrder = new LinkedList<>();
+        this.gameEventPublisher = new CommonGameEventPublisher();
     }
 
     public Player registerPlayer(final String uniqueName) {
-        if (!isRunning) {
+        if (!isRunning()) {
             BoardGamePlayer player = new BoardGamePlayer(FIXED_START_AMOUNT_FOR_PLAYER, uniqueName);
-            if (uniquePlayers.add(player)) {
+            if (!uniquePlayers.containsKey(uniqueName)) {
+                uniquePlayers.put(uniqueName, player);
                 playersTurnOrder.add(player);
+                publishNewPlayerRegisterEvent(uniqueName);
             }
             return player;
         } else {
@@ -79,19 +93,38 @@ public class Game {
     }
 
     public void start() {
-        synchronized (this) {
-            if (isRunning) {
-                throw new CannotStartGameException(ExceptionMessageConstants.GAME_IS_ALREADY_RUNNING);
-            }
-        }
-        if (uniquePlayers.size() >= 2) {
-            isRunning = true;
-        }
+        runGame();
+        publishGameStartedEvent();
+    }
+
+    private void runGame() {
+        validateIfRunnable();
+        gameState = GAME_STATE_RUNNING;
         playerWithCurrentChance = playersTurnOrder.poll();
     }
 
-    public boolean isRunning() {
-        return isRunning;
+    private void publishGameStartedEvent() {
+        StringBuilder playersList = new StringBuilder();
+        for (Iterator<String> iterator = uniquePlayers.keySet().iterator(); iterator.hasNext(); ) {
+            playersList.append(iterator.next());
+            if(iterator.hasNext())
+                playersList.append(", ");
+        }
+        gameEventPublisher.publishEvent(new GameEvent("GAME_STARTED", playersList.toString()));
+    }
+
+    private void validateIfRunnable() {
+        synchronized (this) {
+            if (isRunning()) {
+                throw new CannotStartGameException(ExceptionMessageConstants.GAME_IS_ALREADY_RUNNING);
+            }
+            if (isFinished()) {
+                throw new CannotStartGameException(ExceptionMessageConstants.GAME_HAS_FINISHED);
+            }
+            if (uniquePlayers.size() < 2) {
+                throw new CannotStartGameException(ExceptionMessageConstants.NOT_ENOUGH_PLAYERS);
+            }
+        }
     }
 
     public int getBankMoneyValue() {
@@ -101,6 +134,11 @@ public class Game {
     private void nextTurn() {
         playersTurnOrder.add(playerWithCurrentChance);
         playerWithCurrentChance = playersTurnOrder.poll();
+        publishTurnChangedEvent();
+    }
+
+    private void publishTurnChangedEvent() {
+        gameEventPublisher.publishEvent(new GameEvent("TURN_CHANGED", playerWithCurrentChance.getUniqueName()));
     }
 
     public String getPlayerWithCurrentTurn() {
@@ -109,19 +147,30 @@ public class Game {
     }
 
     private void validateIfGameHasStarted() {
-        if (!isRunning)
+        if (!isRunning())
             throw new GameIsNotStartedException();
     }
 
-    public void makePlayerMove(Player player) {
+    public void makeMove(Player player) {
         validateIfGameHasStarted();
         validateIfThisPlayerHaveTurn(player);
 
-        movePlayerAheadByAmount(playerWithCurrentChance, dice.rollTheDice());
+        int diceValue = rollTheDice();
+        movePlayerAheadByAmount(playerWithCurrentChance, diceValue);
 
         applyRuleAtCurrentPosition(playerWithCurrentChance);
 
         nextTurn();
+    }
+
+    protected int rollTheDice() {
+        int diceValue  = this.dice.rollTheDice();
+        publishDiceRolledEvent(diceValue);
+        return diceValue;
+    }
+
+    private void publishDiceRolledEvent(int diceValue) {
+        gameEventPublisher.publishEvent(new GameEvent("DICE_ROLLED", ""+diceValue));
     }
 
     /**
@@ -153,4 +202,34 @@ public class Game {
             throw new PlayerCannotMakeTurnException(ExceptionMessageConstants.TURNS_WHEN_IT_S_NOT_THEIR_CHANCE);
     }
 
+    public void subscribe(Viewer viewer) {
+        gameEventPublisher.addSubscriber(viewer);
+    }
+
+    protected void publishNewPlayerRegisterEvent(String name) {
+        GameEvent player_joined = new GameEvent("PLAYER_JOINED", name);
+        gameEventPublisher.publishEvent(player_joined);
+    }
+
+    public void purchaseCurrentCellAsset(Player player) {
+        int position = player.getCurrentPosition();
+        board.purchaseCellAsset(position, uniquePlayers.get(player.getUniqueName()));
+        publishPurchaseEvent(player, position);
+    }
+
+    public boolean isRunning() {
+        return gameState == GAME_STATE_RUNNING;
+    }
+
+    public boolean isFinished(){
+        return gameState == GAME_STATE_FINISHED;
+    }
+
+    protected void finish() {
+        gameState = GAME_STATE_FINISHED;
+    }
+
+    private void publishPurchaseEvent(Player player, int position) {
+        gameEventPublisher.publishEvent(new GameEvent("PURCHASED", player.getUniqueName() + "-Cell-" + position));
+    }
 }

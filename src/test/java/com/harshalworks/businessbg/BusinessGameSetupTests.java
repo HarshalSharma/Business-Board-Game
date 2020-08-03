@@ -25,6 +25,7 @@ package com.harshalworks.businessbg;
 
 import com.harshalworks.businessbg.exceptions.CannotRegisterPlayerException;
 import com.harshalworks.businessbg.exceptions.CannotStartGameException;
+import com.harshalworks.businessbg.player.Player;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -41,7 +42,7 @@ public class BusinessGameSetupTests {
                 null, null);
     }
 
-    @Test
+    @Test(expected = CannotStartGameException.class)
     public void canNotStartAGameWithLessThan2UniquePlayers() {
         //Given
         game.registerPlayer(TestConstants.PLAYER_1);
@@ -49,9 +50,6 @@ public class BusinessGameSetupTests {
 
         //when
         game.start();
-
-        //then
-        assertFalse(game.isRunning());
     }
 
     @Test
@@ -72,7 +70,7 @@ public class BusinessGameSetupTests {
         //given
         game.registerPlayer(TestConstants.PLAYER_1);
         game.registerPlayer(TestConstants.PLAYER_2);
-        game.start();;
+        game.start();
 
         //when
         game.start();
@@ -96,7 +94,7 @@ public class BusinessGameSetupTests {
     @Test
     public void eachPlayerShouldGetSamePositiveAmountUponRegisteringToGame() {
         //Given
-        Player player1 = null, player2 = null;
+        Player player1, player2;
 
         //when
         player1 = game.registerPlayer(TestConstants.PLAYER_1);
@@ -112,18 +110,18 @@ public class BusinessGameSetupTests {
     public void gameShouldHaveAFixedValueOfMoneyForEachPlayerOnStart() {
         //given
         int[] amounts = new int[]{1500, 10, 300};
-        Player player = null;
+        Player player;
 
-        for (int i = 0; i < amounts.length; i++) {
+        for (int amount : amounts) {
             //when
-            game = new Game(amounts[i],
+            game = new Game(amount,
                     5000,
                     null,
                     null);
             player = game.registerPlayer(TestConstants.PLAYER_1);
 
             //then
-            assertEquals(amounts[i], player.getMoneyValue());
+            assertEquals(amount, player.getMoneyValue());
         }
     }
 
@@ -131,17 +129,16 @@ public class BusinessGameSetupTests {
     public void gameShouldHaveABankWithInitialMoney() {
         //given
         int[] amounts = new int[]{100, 1055, 3010};
-        for (int i = 0; i < amounts.length; i++) {
+        for (int amount : amounts) {
             //when
             game = new Game(TestConstants.START_PLAYER_AMOUNT,
-                    amounts[i],
+                    amount,
                     null,
                     null);
 
             //then
-            assertEquals(amounts[i], game.getBankMoneyValue());
+            assertEquals(amount, game.getBankMoneyValue());
         }
     }
-
 
 }
