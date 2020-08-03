@@ -21,7 +21,7 @@
  *
  */
 
-package com.harshalworks.businessbg;
+package com.harshalworks.businessbg.player;
 
 import com.harshalworks.businessbg.dealers.Spender;
 
@@ -32,4 +32,5 @@ public interface Player extends Spender {
     String getUniqueName();
 
     int getCurrentPosition();
+
 }

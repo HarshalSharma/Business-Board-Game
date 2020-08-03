@@ -23,10 +23,15 @@
 
 package com.harshalworks.businessbg.board;
 
+import com.harshalworks.businessbg.TestConstants;
 import com.harshalworks.businessbg.board.cell.BlankCell;
 import com.harshalworks.businessbg.board.cell.Cell;
+import com.harshalworks.businessbg.board.cell.RentableCell;
+import com.harshalworks.businessbg.board.cell.RentableMemberbership;
 import com.harshalworks.businessbg.exceptions.CannotInitializeBoardException;
+import com.harshalworks.businessbg.exceptions.CannotPurchaseThisCell;
 import com.harshalworks.businessbg.exceptions.InvalidBoardPositionException;
+import com.harshalworks.businessbg.player.BoardGamePlayer;
 import com.harshalworks.businessbg.rules.Rule;
 import org.junit.Assert;
 import org.junit.Test;
@@ -86,5 +91,36 @@ public class BoardTest {
         //expect invalid board position
     }
 
+    @Test(expected = CannotPurchaseThisCell.class)
+    public void cannotPurchaseANonPurchaaseAbleCell(){
+        //given
+        Cell[] boardCells = new Cell[]{new BlankCell()};
+        Board board = new Board(boardCells);
+
+        //when
+        int position = 0;
+        board.purchaseCellAsset(position, null);
+
+        //expect  cannot purcahse a blank cell.
+    }
+
+    @Test
+    public void boardCanSellCellsToMarketingAssistants(){
+        //given
+        RentableCell cell = new RentableCell(new RentableMemberbership[]{
+                new RentableMemberbership("",1000,100)
+        });
+        Cell[] boardCells = new Cell[]{cell};
+        Board board = new Board(boardCells);
+        BoardGamePlayer player = new BoardGamePlayer(TestConstants.START_PLAYER_AMOUNT,
+                TestConstants.PLAYER_1);
+
+        //when
+        int position = 0;
+        board.purchaseCellAsset(position, player);
+
+        //then
+        Assert.assertEquals(player, cell.getOwner());
+    }
 
 }

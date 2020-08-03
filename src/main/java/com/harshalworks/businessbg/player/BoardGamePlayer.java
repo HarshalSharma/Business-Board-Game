@@ -23,10 +23,7 @@
 
 package com.harshalworks.businessbg.player;
 
-import com.harshalworks.businessbg.Player;
 import com.harshalworks.businessbg.dealers.MarketAssistant;
-import com.harshalworks.businessbg.dealers.Payee;
-import com.harshalworks.businessbg.dealers.Spender;
 
 import java.util.Objects;
 

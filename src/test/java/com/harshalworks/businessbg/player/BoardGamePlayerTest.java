@@ -21,11 +21,24 @@
  *
  */
 
-package com.harshalworks.businessbg.exceptions;
+package com.harshalworks.businessbg.player;
 
-public class CannotPurchaseASoldCell extends RuntimeException {
+import com.harshalworks.businessbg.TestConstants;
+import org.junit.Assert;
+import org.junit.Test;
 
-    public CannotPurchaseASoldCell(String message) {
-        super(ExceptionMessageConstants.CANNOT_PURCHASE_SOLD_CELL + message);
+import java.util.Objects;
+
+public class BoardGamePlayerTest {
+
+    @Test
+    public void ifTwoPlayerObjectsHaveSameUniqueNameThenTheyAreEqual(){
+        //given
+        BoardGamePlayer player = new BoardGamePlayer(TestConstants.START_PLAYER_AMOUNT,
+                TestConstants.PLAYER_1);
+
+        //then
+        Assert.assertEquals(Objects.hash(TestConstants.PLAYER_1), player.hashCode());
     }
+
 }

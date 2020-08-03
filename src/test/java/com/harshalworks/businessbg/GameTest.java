@@ -31,6 +31,7 @@ import com.harshalworks.businessbg.dice.MockFixedOutputDice;
 import com.harshalworks.businessbg.dice.StandardSixSidedDice;
 import com.harshalworks.businessbg.exceptions.GameIsNotStartedException;
 import com.harshalworks.businessbg.exceptions.PlayerCannotMakeTurnException;
+import com.harshalworks.businessbg.player.Player;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -85,13 +86,13 @@ public class GameTest {
             expectPlayerWithTurn(player1);
 
             //when
-            game.makePlayerMove(player1);
+            game.makeMove(player1);
 
             //then
             expectPlayerWithTurn(player2);
 
             //when
-            game.makePlayerMove(player2);
+            game.makeMove(player2);
         }
     }
 
@@ -101,7 +102,7 @@ public class GameTest {
         Player player = game.registerPlayer(TestConstants.PLAYER_1);
 
         //when
-        game.makePlayerMove(player);
+        game.makeMove(player);
 
         //expect exception that game is not started
     }
@@ -114,7 +115,7 @@ public class GameTest {
 
         //when
         game.start();
-        game.makePlayerMove(player2);
+        game.makeMove(player2);
 
         //expects throw new exception that its not your turn.
     }
@@ -135,7 +136,6 @@ public class GameTest {
         Assert.assertEquals(player.getUniqueName(), game.getPlayerWithCurrentTurn());
     }
 
-
     @Test
     public void playersShouldRepeatFromCell1WhenReachedBeyondProvidedBoardLength() {
         //given
@@ -149,8 +149,8 @@ public class GameTest {
 
         //when
         for (int i = 0; i < 5; i++) {
-            game.makePlayerMove(player1);
-            game.makePlayerMove(player2);
+            game.makeMove(player1);
+            game.makeMove(player2);
         }
 
         //then
@@ -178,7 +178,7 @@ public class GameTest {
         for (int i = 0; i < diceOutput.length; i += 2) {
             //when
             initialPos = player1.getCurrentPosition();
-            game.makePlayerMove(player1);
+            game.makeMove(player1);
 
             //then
             expectCurrentPosition(player1, (initialPos + diceOutput[i])
@@ -186,7 +186,7 @@ public class GameTest {
 
             //when
             initialPos = player2.getCurrentPosition();
-            game.makePlayerMove(player2);
+            game.makeMove(player2);
 
             //then
             expectCurrentPosition(player2, (initialPos + diceOutput[i + 1])

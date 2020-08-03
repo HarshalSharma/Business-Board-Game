@@ -24,7 +24,7 @@
 package com.harshalworks.businessbg.board.cell;
 
 import com.harshalworks.businessbg.Game;
-import com.harshalworks.businessbg.Player;
+import com.harshalworks.businessbg.player.Player;
 import com.harshalworks.businessbg.TestConstants;
 import com.harshalworks.businessbg.board.Board;
 import com.harshalworks.businessbg.dice.MockFixedOutputDice;
@@ -55,7 +55,7 @@ public class CellTest {
         Player player = setupGameAndGetPlayer(board, dice);
 
         //when
-        game.makePlayerMove(player);
+        game.makeMove(player);
 
         //then
         Assert.assertEquals(TestConstants.START_PLAYER_AMOUNT - amountToBank, player.getMoneyValue());
@@ -71,7 +71,7 @@ public class CellTest {
         Player player = setupGameAndGetPlayer(board, dice);
 
         //when
-        game.makePlayerMove(player);
+        game.makeMove(player);
 
         //then
         Assert.assertEquals(TestConstants.START_PLAYER_AMOUNT + reward, player.getMoneyValue());

@@ -21,16 +21,29 @@
  *
  */
 
-package com.harshalworks.businessbg;
+package com.harshalworks.businessbg.events;
 
-public interface ChanceSubscription {
+import java.util.ArrayList;
+import java.util.List;
 
-    void onMyChance();
+public class TestViewer implements Viewer{
 
-    void onAfterRollingDice(int diceValue);
+    private List<GameEvent> events = new ArrayList<>();
 
-    void onChanceCompleted();
+    @Override
+    public void notify(GameEvent event) {
+        this.events.add(event);
+    }
 
-    void turnChanged();
+    public GameEvent getLatestEvent() {
+        return events.get(events.size()-1);
+    }
 
+    public List<GameEvent> getEvents() {
+        return events;
+    }
+
+    public GameEvent getEventFromLast(int i) {
+        return events.get(events.size()-i-1);
+    }
 }

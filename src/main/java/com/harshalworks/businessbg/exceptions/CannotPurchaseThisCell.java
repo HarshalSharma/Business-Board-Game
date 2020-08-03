@@ -23,19 +23,9 @@
 
 package com.harshalworks.businessbg.exceptions;
 
-public interface ExceptionMessageConstants {
+public class CannotPurchaseThisCell extends RuntimeException {
 
-    String TURNS_WHEN_IT_S_NOT_THEIR_CHANCE = "PLAYERS CANNOT MAKE TURNS WHEN IT'S NOT THEIR CHANCE.";
-
-    String GAME_IS_ALREADY_RUNNING = "GAME IS ALREADY RUNNING.";
-
-    String WHEN_THE_GAME_HAS_ALREADY_STARTED = "WHEN THE GAME IS ALREADY STARTED.";
-
-    String GIVEN_BOARD_LENGTH_IS_ZERO = "GIVEN BOARD LENGTH IS ZERO.";
-
-    String NO_CELL_TYPE_DEFINED = "NO CELL TYPE IS DEFINED FOR THE GIVEN TYPE ";
-
-    String CANNOT_PURCHASE_CELL = "CANNOT PURCHASE THIS CELL.";
-
-    String NOT_ENOUGH_PLAYERS = "NOT ENOUGH PLAYERS AVAILABLE TO START GAME";
+    public CannotPurchaseThisCell(String message) {
+        super(ExceptionMessageConstants.CANNOT_PURCHASE_CELL + message);
+    }
 }

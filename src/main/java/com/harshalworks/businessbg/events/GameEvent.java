@@ -21,21 +21,24 @@
  *
  */
 
-package com.harshalworks.businessbg.exceptions;
+package com.harshalworks.businessbg.events;
 
-public interface ExceptionMessageConstants {
+public class GameEvent {
 
-    String TURNS_WHEN_IT_S_NOT_THEIR_CHANCE = "PLAYERS CANNOT MAKE TURNS WHEN IT'S NOT THEIR CHANCE.";
+    private String type;
+    private String eventMessage;
 
-    String GAME_IS_ALREADY_RUNNING = "GAME IS ALREADY RUNNING.";
+    public GameEvent(String type, String eventMessage) {
+        this.eventMessage = eventMessage;
+        this.type = type;
+    }
 
-    String WHEN_THE_GAME_HAS_ALREADY_STARTED = "WHEN THE GAME IS ALREADY STARTED.";
+    public String getEventMessage() {
+        return eventMessage;
+    }
 
-    String GIVEN_BOARD_LENGTH_IS_ZERO = "GIVEN BOARD LENGTH IS ZERO.";
+    public String getType() {
+        return type;
+    }
 
-    String NO_CELL_TYPE_DEFINED = "NO CELL TYPE IS DEFINED FOR THE GIVEN TYPE ";
-
-    String CANNOT_PURCHASE_CELL = "CANNOT PURCHASE THIS CELL.";
-
-    String NOT_ENOUGH_PLAYERS = "NOT ENOUGH PLAYERS AVAILABLE TO START GAME";
 }

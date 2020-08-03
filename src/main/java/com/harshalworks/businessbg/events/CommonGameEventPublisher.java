@@ -21,21 +21,27 @@
  *
  */
 
-package com.harshalworks.businessbg.exceptions;
+package com.harshalworks.businessbg.events;
 
-public interface ExceptionMessageConstants {
+import java.util.ArrayList;
+import java.util.List;
 
-    String TURNS_WHEN_IT_S_NOT_THEIR_CHANCE = "PLAYERS CANNOT MAKE TURNS WHEN IT'S NOT THEIR CHANCE.";
+public class CommonGameEventPublisher implements GameEventPublisher {
 
-    String GAME_IS_ALREADY_RUNNING = "GAME IS ALREADY RUNNING.";
+    private List<Viewer> viewersList;
 
-    String WHEN_THE_GAME_HAS_ALREADY_STARTED = "WHEN THE GAME IS ALREADY STARTED.";
+    public CommonGameEventPublisher() {
+        this.viewersList = new ArrayList<>();
+    }
 
-    String GIVEN_BOARD_LENGTH_IS_ZERO = "GIVEN BOARD LENGTH IS ZERO.";
+    @Override
+    public void publishEvent(GameEvent event) {
+        viewersList.forEach(viewer -> viewer.notify(event));
+    }
 
-    String NO_CELL_TYPE_DEFINED = "NO CELL TYPE IS DEFINED FOR THE GIVEN TYPE ";
+    @Override
+    public void addSubscriber(Viewer viewer) {
+        viewersList.add(viewer);
+    }
 
-    String CANNOT_PURCHASE_CELL = "CANNOT PURCHASE THIS CELL.";
-
-    String NOT_ENOUGH_PLAYERS = "NOT ENOUGH PLAYERS AVAILABLE TO START GAME";
 }

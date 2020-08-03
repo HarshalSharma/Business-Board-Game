@@ -25,7 +25,11 @@ package com.harshalworks.businessbg.board;
 
 import com.harshalworks.businessbg.board.cell.BlankCell;
 import com.harshalworks.businessbg.board.cell.Cell;
+import com.harshalworks.businessbg.board.cell.RentableCell;
+import com.harshalworks.businessbg.dealers.MarketAssistant;
+import com.harshalworks.businessbg.dealers.Spender;
 import com.harshalworks.businessbg.exceptions.CannotInitializeBoardException;
+import com.harshalworks.businessbg.exceptions.CannotPurchaseThisCell;
 import com.harshalworks.businessbg.exceptions.ExceptionMessageConstants;
 import com.harshalworks.businessbg.exceptions.InvalidBoardPositionException;
 import com.harshalworks.businessbg.rules.Rule;
@@ -66,5 +70,16 @@ public class Board {
             return new BlankCell();
 
         return rule;
+    }
+
+    public void purchaseCellAsset(int position, MarketAssistant assistant) {
+        isCellAssetPurchaseable(position);
+        RentableCell cell = (RentableCell) boardPath[position];
+        cell.purchase(assistant);
+    }
+
+    private void isCellAssetPurchaseable(int position) {
+        if(!(boardPath[position] instanceof RentableCell))
+            throw new CannotPurchaseThisCell("Not Purchasable cell asset.");
     }
 }
