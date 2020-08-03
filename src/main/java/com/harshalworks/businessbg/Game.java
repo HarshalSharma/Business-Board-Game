@@ -51,6 +51,10 @@ import java.util.*;
  */
 public class Game {
 
+    protected final static int GAME_STATE_WAITING = 0;
+    protected final static int GAME_STATE_RUNNING = 1;
+    protected final static int GAME_STATE_FINISHED = 2;
+
     private Map<String, BoardGamePlayer> uniquePlayers;
     private final Queue<BoardGamePlayer> playersTurnOrder;
     private BoardGamePlayer playerWithCurrentChance;
@@ -59,7 +63,7 @@ public class Game {
     private final Bank bank;
     private final GameEventPublisher gameEventPublisher;
 
-    private boolean isRunning = false;
+    private int gameState = GAME_STATE_WAITING;
     private final int FIXED_START_AMOUNT_FOR_PLAYER;
 
     public Game(final int fixedAmountForPlayer, final int initialAmountOfBank,
@@ -75,7 +79,7 @@ public class Game {
     }
 
     public Player registerPlayer(final String uniqueName) {
-        if (!isRunning) {
+        if (!isRunning()) {
             BoardGamePlayer player = new BoardGamePlayer(FIXED_START_AMOUNT_FOR_PLAYER, uniqueName);
             if (!uniquePlayers.containsKey(uniqueName)) {
                 uniquePlayers.put(uniqueName, player);
@@ -95,7 +99,7 @@ public class Game {
 
     private void runGame() {
         validateIfRunnable();
-        isRunning = true;
+        gameState = GAME_STATE_RUNNING;
         playerWithCurrentChance = playersTurnOrder.poll();
     }
 
@@ -111,17 +115,16 @@ public class Game {
 
     private void validateIfRunnable() {
         synchronized (this) {
-            if (isRunning) {
+            if (isRunning()) {
                 throw new CannotStartGameException(ExceptionMessageConstants.GAME_IS_ALREADY_RUNNING);
+            }
+            if (isFinished()) {
+                throw new CannotStartGameException(ExceptionMessageConstants.GAME_HAS_FINISHED);
             }
             if (uniquePlayers.size() < 2) {
                 throw new CannotStartGameException(ExceptionMessageConstants.NOT_ENOUGH_PLAYERS);
             }
         }
-    }
-
-    public boolean isRunning() {
-        return isRunning;
     }
 
     public int getBankMoneyValue() {
@@ -144,7 +147,7 @@ public class Game {
     }
 
     private void validateIfGameHasStarted() {
-        if (!isRunning)
+        if (!isRunning())
             throw new GameIsNotStartedException();
     }
 
@@ -212,6 +215,18 @@ public class Game {
         int position = player.getCurrentPosition();
         board.purchaseCellAsset(position, uniquePlayers.get(player.getUniqueName()));
         publishPurchaseEvent(player, position);
+    }
+
+    public boolean isRunning() {
+        return gameState == GAME_STATE_RUNNING;
+    }
+
+    public boolean isFinished(){
+        return gameState == GAME_STATE_FINISHED;
+    }
+
+    protected void finish() {
+        gameState = GAME_STATE_FINISHED;
     }
 
     private void publishPurchaseEvent(Player player, int position) {

@@ -29,6 +29,7 @@ import com.harshalworks.businessbg.board.cell.Cell;
 import com.harshalworks.businessbg.dice.Dice;
 import com.harshalworks.businessbg.dice.MockFixedOutputDice;
 import com.harshalworks.businessbg.dice.StandardSixSidedDice;
+import com.harshalworks.businessbg.exceptions.CannotStartGameException;
 import com.harshalworks.businessbg.exceptions.GameIsNotStartedException;
 import com.harshalworks.businessbg.exceptions.PlayerCannotMakeTurnException;
 import com.harshalworks.businessbg.player.Player;
@@ -192,6 +193,38 @@ public class GameTest {
             expectCurrentPosition(player2, (initialPos + diceOutput[i + 1])
                     % boardLength);
         }
+    }
+
+    @Test(expected = CannotStartGameException.class)
+    public void finishedGameCannotBeStarted(){
+        //Given
+        Player player = game.registerPlayer(TestConstants.PLAYER_1);
+        game.registerPlayer(TestConstants.PLAYER_2);
+
+        //validate
+        Assert.assertFalse(game.isFinished());
+
+        //when
+        game.start();
+        game.finish();
+
+        //then
+        game.start();
+    }
+
+    @Test(expected = GameIsNotStartedException.class)
+    public void playersCannotMakeTurnOnAFinishedGame(){
+        //Given
+        Player player = game.registerPlayer(TestConstants.PLAYER_1);
+        game.registerPlayer(TestConstants.PLAYER_2);
+
+        //when
+        game.start();
+        game.finish();
+
+        //then
+        game.makeMove(player);
+        // expect cannot make move.
     }
 
     private void expectCurrentPosition(Player player1, int expected) {
