@@ -21,25 +21,11 @@
  *
  */
 
-package com.harshalworks.businessbg.board.cell;
+package com.harshalworks.businessbg.board.cell.factory;
 
-public abstract class BoardCellFactory {
-
-    protected CellPropertiesProvider cellProperties;
-
-    public BoardCellFactory(CellPropertiesProvider cellProperties) {
-        this.cellProperties = cellProperties;
-    }
-
-    public Cell createCell(String cellType) {
-        if (isBlankCell(cellType)) return new BlankCell();
-
-        return buildCell(cellType);
-    }
-
-    protected boolean isBlankCell(String cell) {
-        return cell == null || cell.equals("");
-    }
-
-    protected abstract Cell buildCell(String type);
+public enum StandardCellTypes {
+    PAY_TO_BANK,
+    BANK_REWARD,
+    RENT_ABLE,
+    BLANK
 }

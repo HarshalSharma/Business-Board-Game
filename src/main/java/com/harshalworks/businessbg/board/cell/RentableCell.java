@@ -39,6 +39,16 @@ public class RentableCell extends Cell implements Asset {
         this.rentableMemberberships = memberberships;
     }
 
+    /**
+     * Copy Constructor
+     * @param rentableCell  existing rent able to duplicate from.
+     */
+    public RentableCell(final RentableCell rentableCell) {
+        this.owner = rentableCell.owner;
+        this.rentableMemberberships = rentableCell.rentableMemberberships;
+        this.membershipStatus = rentableCell.membershipStatus;
+    }
+
     @Override
     public void execute(BoardGamePlayer player, MarketAssistant bank) {
         if(owner!=null) {

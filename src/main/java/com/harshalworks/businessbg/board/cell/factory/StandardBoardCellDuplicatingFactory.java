@@ -21,10 +21,28 @@
  *
  */
 
-package com.harshalworks.businessbg.board.cell;
+package com.harshalworks.businessbg.board.cell.factory;
 
-public interface CellPropertiesProvider {
+import com.harshalworks.businessbg.board.cell.*;
 
-    Object getPropertiesForType(String cellType);
+import java.util.Map;
 
+public class StandardBoardCellDuplicatingFactory extends BoardCellDuplicatingFactory {
+
+    public StandardBoardCellDuplicatingFactory(Map<String, Cell> cellReference) {
+        super(cellReference);
+    }
+
+    @Override
+    protected Cell duplicateCell(Cell cell, String cellType) {
+        switch (StandardCellTypes.valueOf(cellType)){
+            case PAY_TO_BANK:
+                return new PayToBankCell((PayToBankCell) cell);
+            case BANK_REWARD:
+                return new BankRewardCell((BankRewardCell) cell);
+            case RENT_ABLE:
+                return new RentableCell((RentableCell) cell);
+        }
+        return new BlankCell();
+    }
 }

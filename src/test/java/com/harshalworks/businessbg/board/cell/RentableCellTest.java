@@ -187,7 +187,9 @@ public class RentableCellTest {
     @Test(expected = CannotPurchaseThisAsset.class)
     public void onlyOwnerCanUpgradeTheirMembership(){
         RentableCell  cell = new RentableCell(new RentableMemberbership[]{
-                new RentableMemberbership("",500, 100)});
+                new RentableMemberbership("",500, 100),
+                new RentableMemberbership("",1500, 300),
+        });
         BoardGamePlayer player1 = new BoardGamePlayer(TestConstants.START_PLAYER_AMOUNT,
                 TestConstants.PLAYER_1);
         BoardGamePlayer player2 = new BoardGamePlayer(TestConstants.START_PLAYER_AMOUNT, TestConstants.PLAYER_2);
