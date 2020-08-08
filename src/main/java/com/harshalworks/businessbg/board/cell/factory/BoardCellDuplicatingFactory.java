@@ -21,36 +21,34 @@
  *
  */
 
-package com.harshalworks.businessbg.board.cell;
+package com.harshalworks.businessbg.board.cell.factory;
 
-import com.harshalworks.businessbg.dealers.MarketAssistant;
-import com.harshalworks.businessbg.player.BoardGamePlayer;
+import com.harshalworks.businessbg.board.cell.BlankCell;
+import com.harshalworks.businessbg.board.cell.Cell;
+import com.harshalworks.businessbg.exceptions.CellTypeNotDefinedException;
+import com.harshalworks.businessbg.exceptions.ExceptionMessageConstants;
 
-/**
- *
- * When any player lands on the jail cell on the board they need to pay an amount to the bank.
- *
- * Acting as a reciever for the Rules
- */
-public class PayToBankCell extends Cell {
+import java.util.Map;
 
-    private final int amount;
+public abstract class BoardCellDuplicatingFactory {
 
-    public PayToBankCell(final int amount) {
-        this.amount = amount;
+    private Map<String, Cell> cellReference;
+
+    public BoardCellDuplicatingFactory(Map<String, Cell> cellReference) {
+        this.cellReference = cellReference;
     }
 
-    /**
-     * Copy Constructor
-     * @param payToBankCell  existing pay to bank cell to duplicate from.
-     */
-    public PayToBankCell(final PayToBankCell payToBankCell) {
-        this.amount = payToBankCell.amount;
+    public Cell createCell(String cellType) {
+        if (isBlankCell(cellType)) return new BlankCell();
+        Cell cell = cellReference.get(cellType);
+        if(cell == null)
+            throw new CellTypeNotDefinedException(ExceptionMessageConstants.NO_CELL_TYPE_DEFINED);
+        return duplicateCell(cell, cellType);
     }
 
-    @Override
-    public void execute(BoardGamePlayer player, MarketAssistant bank) {
-        bank.addMoney(amount);
-        player.deductMoney(amount);
+    protected abstract Cell duplicateCell(Cell cell, String cellType);
+
+    protected boolean isBlankCell(String cell) {
+        return cell == null || cell.equals("");
     }
 }

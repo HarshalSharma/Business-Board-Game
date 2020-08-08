@@ -34,6 +34,14 @@ public class BankRewardCell extends Cell {
         this.rewardAmount = rewardAmount;
     }
 
+    /**
+     * Copy Constructor
+     * @param bankRewardCell existing bankRewardCell to duplicate from.
+     */
+    public BankRewardCell(final BankRewardCell bankRewardCell) {
+        this.rewardAmount = bankRewardCell.rewardAmount;
+    }
+
     @Override
     public void execute(BoardGamePlayer player, MarketAssistant bank) {
         player.addMoney(rewardAmount);
