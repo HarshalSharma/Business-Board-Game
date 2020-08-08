@@ -24,18 +24,23 @@
 package com.harshalworks.businessbg.player;
 
 import com.harshalworks.businessbg.dealers.MarketAssistant;
+import com.harshalworks.businessbg.dealers.PropertyAck;
 
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 public class BoardGamePlayer implements Player, MarketAssistant {
 
     private int moneyValue;
     private final String uniqueName;
     private int currentPosition;
+    private Set<PropertyAck> propertyOwned;
 
     public BoardGamePlayer(final int moneyValue, final String uniqueName) {
         this.moneyValue = moneyValue;
         this.uniqueName = uniqueName;
+        propertyOwned = new HashSet<>();
     }
 
     @Override
@@ -51,6 +56,11 @@ public class BoardGamePlayer implements Player, MarketAssistant {
     @Override
     public int getCurrentPosition() {
         return currentPosition;
+    }
+
+    @Override
+    public int getTotalAssetValue() {
+        return propertyOwned.stream().mapToInt(PropertyAck::getPropertyValue).sum();
     }
 
     @Override
@@ -81,7 +91,17 @@ public class BoardGamePlayer implements Player, MarketAssistant {
     }
 
     @Override
+    public void addProperty(PropertyAck propertyDetails) {
+        propertyOwned.remove(propertyDetails);
+        propertyOwned.add(propertyDetails);
+    }
+
+    @Override
     public boolean haveAvailableAmount(int amount) {
         return moneyValue >= amount;
+    }
+
+    public Set<PropertyAck> getPropertiesOwned() {
+        return propertyOwned;
     }
 }

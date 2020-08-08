@@ -23,16 +23,17 @@
 
 package com.harshalworks.businessbg.board.cell;
 
+import com.harshalworks.businessbg.board.Asset;
 import com.harshalworks.businessbg.dealers.MarketAssistant;
 import com.harshalworks.businessbg.dealers.Payee;
-import com.harshalworks.businessbg.exceptions.CannotPurchaseThisCell;
+import com.harshalworks.businessbg.exceptions.CannotPurchaseThisAsset;
 import com.harshalworks.businessbg.player.BoardGamePlayer;
 
-public class RentableCell extends Cell {
+public class RentableCell extends Cell implements Asset {
 
     private MarketAssistant owner;
     private final RentableMemberbership[] rentableMemberberships;
-    private int membershipStatus = 0;
+    private int membershipStatus = -1;
 
     public RentableCell(RentableMemberbership[] memberberships) {
         this.rentableMemberberships = memberberships;
@@ -55,41 +56,38 @@ public class RentableCell extends Cell {
         return owner;
     }
 
+    @Override
     public void purchase(MarketAssistant customer) {
-        if(this.owner != null)
-            throw new CannotPurchaseThisCell("");
-
-        this.owner = customer;
-        customer.deductMoney(rentableMemberberships[0].getCost());
-    }
-
-    public boolean upgradeMembership(MarketAssistant customer) {
-        if(customer != owner)
-            throw new CannotPurchaseThisCell("Upgrade not allowed.");
-
-        if(checkIfUpgradePossible())
-            return false;
-
-        if(askIfCustomerHaveAvailableAmount(customer)){
-            allotNewMembership(customer);
-            return true;
+        if(this.owner != null && customer != owner)
+            throw new CannotPurchaseThisAsset("Purchase/Upgrade not allowed.");
+        if(this.owner == null) {
+            this.owner = customer;
+            membershipStatus = 0;
+            return;
         }
-
-        return false;
+        upgradeMembership();
     }
 
-    protected void allotNewMembership(MarketAssistant customer) {
-        customer.deductMoney(rentableMemberberships[membershipStatus+1].getCost()
-                - rentableMemberberships[membershipStatus].getCost());
+    protected void upgradeMembership() {
+        checkIfUpgradePossible();
         membershipStatus++;
     }
 
-    protected boolean askIfCustomerHaveAvailableAmount(MarketAssistant customer) {
-        return customer.haveAvailableAmount(rentableMemberberships[membershipStatus+1].getCost() - rentableMemberberships[membershipStatus].getCost());
+    @Override
+    public int getCost() {
+        if(owner == null)
+            return rentableMemberberships[0].getCost();
+
+        checkIfUpgradePossible();
+
+        return rentableMemberberships[membershipStatus+1].getCost()
+                - rentableMemberberships[membershipStatus].getCost();
     }
 
     protected boolean checkIfUpgradePossible() {
-        return membershipStatus + 1 == rentableMemberberships.length;
+        if(membershipStatus + 1 >= rentableMemberberships.length)
+            throw new CannotPurchaseThisAsset("No more memberships available");
+        return true;
     }
 
     public RentableMemberbership getMembershipStatus() {

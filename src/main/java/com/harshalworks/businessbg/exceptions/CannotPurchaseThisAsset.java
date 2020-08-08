@@ -23,9 +23,9 @@
 
 package com.harshalworks.businessbg.exceptions;
 
-public class CannotPurchaseThisCell extends RuntimeException {
+public class CannotPurchaseThisAsset extends RuntimeException {
 
-    public CannotPurchaseThisCell(String message) {
-        super(ExceptionMessageConstants.CANNOT_PURCHASE_CELL + message);
+    public CannotPurchaseThisAsset(String message) {
+        super(ExceptionMessageConstants.CANNOT_PURCHASE_ASSET + message);
     }
 }
