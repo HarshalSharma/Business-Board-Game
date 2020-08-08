@@ -37,7 +37,7 @@ public class BusinessGameSetupTests {
 
     @Before
     public void setup() {
-        game = new Game(TestConstants.START_PLAYER_AMOUNT,
+        game = new TestGame(TestConstants.START_PLAYER_AMOUNT,
                 TestConstants.INITIAL_AMOUNT_OF_BANK,
                 null, null);
     }
@@ -114,7 +114,7 @@ public class BusinessGameSetupTests {
 
         for (int amount : amounts) {
             //when
-            game = new Game(amount,
+            game = new TestGame(amount,
                     5000,
                     null,
                     null);
@@ -131,7 +131,7 @@ public class BusinessGameSetupTests {
         int[] amounts = new int[]{100, 1055, 3010};
         for (int amount : amounts) {
             //when
-            game = new Game(TestConstants.START_PLAYER_AMOUNT,
+            game = new TestGame(TestConstants.START_PLAYER_AMOUNT,
                     amount,
                     null,
                     null);

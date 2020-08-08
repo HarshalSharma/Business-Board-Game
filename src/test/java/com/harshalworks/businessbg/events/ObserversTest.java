@@ -24,19 +24,21 @@
 package com.harshalworks.businessbg.events;
 
 import com.harshalworks.businessbg.Game;
-import com.harshalworks.businessbg.dice.MockFixedOutputDice;
-import com.harshalworks.businessbg.player.Player;
+import com.harshalworks.businessbg.PublishableGame;
 import com.harshalworks.businessbg.TestConstants;
+import com.harshalworks.businessbg.TestGame;
 import com.harshalworks.businessbg.board.Board;
 import com.harshalworks.businessbg.board.cell.*;
+import com.harshalworks.businessbg.dice.MockFixedOutputDice;
 import com.harshalworks.businessbg.dice.StandardSixSidedDice;
+import com.harshalworks.businessbg.player.Player;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 public class ObserversTest {
 
-    private Game game;
+    private PublishableGame game;
     private Board board;
 
     @Before
@@ -46,7 +48,7 @@ public class ObserversTest {
                 new PayToBankCell(200),
                 new RentableCell(new RentableMemberbership[]{
                         new RentableMemberbership("dummy", 500,100)})});
-        game = new Game(TestConstants.START_PLAYER_AMOUNT,
+        game = new TestGame(TestConstants.START_PLAYER_AMOUNT,
                 TestConstants.INITIAL_AMOUNT_OF_BANK,
                 new StandardSixSidedDice(), board);
     }
@@ -132,7 +134,7 @@ public class ObserversTest {
         RentableCell rentableCell = new RentableCell(new RentableMemberbership[]{
                 new RentableMemberbership("", 500, 100)});
         board = new Board(new Cell[]{new BlankCell(), rentableCell});
-        game = new Game(TestConstants.START_PLAYER_AMOUNT,
+        game = new TestGame(TestConstants.START_PLAYER_AMOUNT,
                 TestConstants.INITIAL_AMOUNT_OF_BANK,
                 new MockFixedOutputDice(new int[]{1}), board);
 

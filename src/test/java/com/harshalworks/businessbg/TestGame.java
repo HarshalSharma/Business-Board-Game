@@ -21,27 +21,24 @@
  *
  */
 
-package com.harshalworks.businessbg.events;
+package com.harshalworks.businessbg;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.harshalworks.businessbg.bank.Bank;
+import com.harshalworks.businessbg.board.Board;
+import com.harshalworks.businessbg.dice.Dice;
+import com.harshalworks.businessbg.events.StandardGameEventPublisher;
+import com.harshalworks.businessbg.player.BoardGamePlayerFactory;
 
-public class CommonGameEventPublisher implements GameEventPublisher {
+public class TestGame extends PublishableGame{
 
-    private List<Viewer> viewersList;
-
-    public CommonGameEventPublisher() {
-        this.viewersList = new ArrayList<>();
+    public TestGame(int fixedAmountForPlayer, int initialAmountOfBank, Dice dice, Board board) {
+        super(fixedAmountForPlayer, new BoardGamePlayerFactory(),
+                new Bank(initialAmountOfBank), dice, board, new StandardGameEventPublisher());
     }
 
     @Override
-    public void publishEvent(GameEvent event) {
-        viewersList.forEach(viewer -> viewer.notify(event));
-    }
-
-    @Override
-    public void addSubscriber(Viewer viewer) {
-        viewersList.add(viewer);
+    protected boolean isFinishState() {
+        return false;
     }
 
 }

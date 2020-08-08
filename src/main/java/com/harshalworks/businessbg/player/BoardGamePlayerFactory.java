@@ -21,36 +21,12 @@
  *
  */
 
-package com.harshalworks.businessbg;
+package com.harshalworks.businessbg.player;
 
-import com.harshalworks.businessbg.player.Player;
-import org.junit.Before;
-import org.junit.Test;
+public class BoardGamePlayerFactory implements PlayerFactory{
 
-import static org.junit.Assert.assertEquals;
-
-public class PlayerTests {
-
-    private Game game;
-
-    @Before
-    public void setup() {
-        game = new TestGame(TestConstants.START_PLAYER_AMOUNT,
-                TestConstants.INITIAL_AMOUNT_OF_BANK,
-                null, null);
+    @Override
+    public BoardGamePlayer newPlayerInstance(int fixedAmountForPlayer, String uniqueName) {
+        return new BoardGamePlayer(fixedAmountForPlayer, uniqueName);
     }
-
-    @Test
-    public void playersShouldBeAbleToKnowTheirRegisteredName() {
-        //given
-        String expected = TestConstants.PLAYER_1;
-        Player player;
-
-        //when
-        player = game.registerPlayer(TestConstants.PLAYER_1);
-
-        //then
-        assertEquals(expected, player.getUniqueName());
-    }
-
 }
