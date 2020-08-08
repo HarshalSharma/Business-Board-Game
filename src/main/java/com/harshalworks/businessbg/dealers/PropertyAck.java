@@ -21,17 +21,38 @@
  *
  */
 
-package com.harshalworks.businessbg.player;
+package com.harshalworks.businessbg.dealers;
 
-import com.harshalworks.businessbg.dealers.Spender;
+import java.util.Objects;
 
-public interface Player extends Spender {
+public class PropertyAck {
 
-    int getMoneyValue();
+    private final String propertyId;
+    private final int propertyValue;
 
-    String getUniqueName();
+    public PropertyAck(final String propertyId, final int propertyValue) {
+        this.propertyValue = propertyValue;
+        this.propertyId = propertyId;
+    }
 
-    int getCurrentPosition();
+    public String getPropertyId() {
+        return propertyId;
+    }
 
-    int getTotalAssetValue();
+    public int getPropertyValue() {
+        return propertyValue;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        PropertyAck that = (PropertyAck) o;
+        return propertyId.equals(that.propertyId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(propertyId);
+    }
 }

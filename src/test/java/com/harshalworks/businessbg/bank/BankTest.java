@@ -24,6 +24,7 @@
 package com.harshalworks.businessbg.bank;
 
 import com.harshalworks.businessbg.TestConstants;
+import com.harshalworks.businessbg.dealers.PropertyAck;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -38,6 +39,23 @@ public class BankTest {
         Assert.assertFalse(bank.haveAvailableAmount(TestConstants.INITIAL_AMOUNT_OF_BANK + 1));
         Assert.assertTrue(bank.haveAvailableAmount(TestConstants.INITIAL_AMOUNT_OF_BANK));
 
+    }
+
+    @Test
+    public void bankCanAcquirePropertiesAndShouldHaveHaveEqualMoneyValue(){
+        //given
+        Bank bank = new Bank(TestConstants.INITIAL_AMOUNT_OF_BANK);
+        int propertyOwned1 = 500, propertyOwned2 = 1500;
+        PropertyAck propertyAck1 = new PropertyAck("1", propertyOwned1);
+        PropertyAck propertyAck2 = new PropertyAck("3", propertyOwned2);
+
+        //when
+        bank.addProperty(propertyAck1);
+        bank.addProperty(propertyAck2);
+
+        //then
+        Assert.assertEquals(TestConstants.INITIAL_AMOUNT_OF_BANK +
+                propertyOwned1 + propertyOwned2, bank.getAvailableAmount());
     }
 
 }

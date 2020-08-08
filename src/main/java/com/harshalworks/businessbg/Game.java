@@ -213,7 +213,7 @@ public class Game {
 
     public void purchaseCurrentCellAsset(Player player) {
         int position = player.getCurrentPosition();
-        board.purchaseCellAsset(position, uniquePlayers.get(player.getUniqueName()));
+        board.purchaseCellAsset(position, uniquePlayers.get(player.getUniqueName()), bank);
         publishPurchaseEvent(player, position);
     }
 

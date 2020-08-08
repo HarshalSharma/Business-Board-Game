@@ -24,6 +24,7 @@
 package com.harshalworks.businessbg.bank;
 
 import com.harshalworks.businessbg.dealers.MarketAssistant;
+import com.harshalworks.businessbg.dealers.PropertyAck;
 
 public class Bank implements MarketAssistant {
 
@@ -45,6 +46,11 @@ public class Bank implements MarketAssistant {
     @Override
     public void deductMoney(int amount) {
         bankMoneyValue -= amount;
+    }
+
+    @Override
+    public void addProperty(PropertyAck propertyDetails) {
+        bankMoneyValue += propertyDetails.getPropertyValue();
     }
 
     @Override

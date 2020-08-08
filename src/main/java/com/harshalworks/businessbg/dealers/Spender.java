@@ -27,4 +27,5 @@ public interface Spender {
 
     void deductMoney(int amount);
 
+    void addProperty(PropertyAck propertyDetails);
 }

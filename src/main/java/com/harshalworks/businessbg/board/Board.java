@@ -27,9 +27,9 @@ import com.harshalworks.businessbg.board.cell.BlankCell;
 import com.harshalworks.businessbg.board.cell.Cell;
 import com.harshalworks.businessbg.board.cell.RentableCell;
 import com.harshalworks.businessbg.dealers.MarketAssistant;
-import com.harshalworks.businessbg.dealers.Spender;
+import com.harshalworks.businessbg.dealers.PropertyAck;
 import com.harshalworks.businessbg.exceptions.CannotInitializeBoardException;
-import com.harshalworks.businessbg.exceptions.CannotPurchaseThisCell;
+import com.harshalworks.businessbg.exceptions.CannotPurchaseThisAsset;
 import com.harshalworks.businessbg.exceptions.ExceptionMessageConstants;
 import com.harshalworks.businessbg.exceptions.InvalidBoardPositionException;
 import com.harshalworks.businessbg.rules.Rule;
@@ -72,14 +72,24 @@ public class Board {
         return rule;
     }
 
-    public void purchaseCellAsset(int position, MarketAssistant assistant) {
+    public void purchaseCellAsset(int position, MarketAssistant buyer, MarketAssistant seller) {
         isCellAssetPurchaseable(position);
         RentableCell cell = (RentableCell) boardPath[position];
-        cell.purchase(assistant);
+        makeTransaction(position, buyer, seller, cell);
+    }
+
+    protected void makeTransaction(int position, MarketAssistant buyer, MarketAssistant seller, Asset cell) {
+        int netCost = cell.getCost();
+        if(!buyer.haveAvailableAmount(netCost))
+            throw new CannotPurchaseThisAsset("Insufficient Amount!");
+        buyer.deductMoney(netCost);
+        seller.addMoney(netCost);
+        cell.purchase(buyer);
+        buyer.addProperty(new PropertyAck("CELL_" + position, netCost));
     }
 
     private void isCellAssetPurchaseable(int position) {
-        if(!(boardPath[position] instanceof RentableCell))
-            throw new CannotPurchaseThisCell("Not Purchasable cell asset.");
+        if(!(boardPath[position] instanceof Asset))
+            throw new CannotPurchaseThisAsset("Not Purchasable cell asset.");
     }
 }
