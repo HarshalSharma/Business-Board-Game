@@ -21,17 +21,14 @@
  *
  */
 
-package com.harshalworks.businessbg.player;
+package com.harshalworks.businessbg.board;
 
-import com.harshalworks.businessbg.dealers.Spender;
+import com.harshalworks.businessbg.dealers.MarketAssistant;
 
-public interface Player extends Spender {
+public interface Asset {
 
-    int getMoneyValue();
+    void purchase(MarketAssistant buyer);
 
-    String getUniqueName();
+    int getCost();
 
-    int getCurrentPosition();
-
-    int getTotalAssetValue();
 }

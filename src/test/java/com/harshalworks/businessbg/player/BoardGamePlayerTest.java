@@ -24,10 +24,18 @@
 package com.harshalworks.businessbg.player;
 
 import com.harshalworks.businessbg.TestConstants;
+import com.harshalworks.businessbg.bank.Bank;
+import com.harshalworks.businessbg.board.Board;
+import com.harshalworks.businessbg.board.cell.Cell;
+import com.harshalworks.businessbg.board.cell.RentableCell;
+import com.harshalworks.businessbg.board.cell.RentableMemberbership;
+import com.harshalworks.businessbg.dealers.Payee;
+import com.harshalworks.businessbg.dealers.PropertyAck;
 import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.Objects;
+import java.util.Set;
 
 public class BoardGamePlayerTest {
 
@@ -41,4 +49,64 @@ public class BoardGamePlayerTest {
         Assert.assertEquals(Objects.hash(TestConstants.PLAYER_1), player.hashCode());
     }
 
+    @Test
+    public void boardGamePlayerShouldHaveAListOfPropertiesItOwns(){
+        //given
+        BoardGamePlayer player = new BoardGamePlayer(TestConstants.START_PLAYER_AMOUNT,
+                TestConstants.PLAYER_1);
+
+        //when
+        int propertyOwned1 = 500, propertyOwned2 = 1500;
+        PropertyAck propertyAck1 = new PropertyAck("1", propertyOwned1);
+        PropertyAck propertyAck2 = new PropertyAck("3", propertyOwned2);
+        player.addProperty(propertyAck1);
+        player.addProperty(propertyAck2);
+
+        //then
+        Set<PropertyAck> propertyAcknowledgements = player.getPropertiesOwned();
+        Assert.assertEquals(2, propertyAcknowledgements.size());
+        Assert.assertEquals(propertyOwned1 + propertyOwned2, player.getTotalAssetValue());
+    }
+
+    @Test
+    public void boardGamePlayerShouldHaveAListOfUniquePropertiesItUpgraded(){
+        //given
+        BoardGamePlayer player = new BoardGamePlayer(TestConstants.START_PLAYER_AMOUNT,
+                TestConstants.PLAYER_1);
+        String propertyId = "1";
+        int propertyOwnedInitial = 500, propertyOwnedUpgraded = 1500;
+        PropertyAck propertyAck1 = new PropertyAck(propertyId, propertyOwnedInitial);
+        PropertyAck propertyAck2 = new PropertyAck(propertyId, propertyOwnedUpgraded);
+
+        //when
+        player.addProperty(propertyAck1);
+        player.addProperty(propertyAck2);
+
+        //then
+        Set<PropertyAck> propertyAcknowledgements = player.getPropertiesOwned();
+        Assert.assertEquals(1, propertyAcknowledgements.size());
+        Assert.assertEquals(propertyOwnedUpgraded, player.getTotalAssetValue());
+    }
+
+    @Test
+    public void purchasingACellWouldAddPurchaseAckSlipWithPlayer() {
+        //given
+        int purchaseAmount = 500;
+        int cellPosition = 0;
+        BoardGamePlayer player = new BoardGamePlayer(TestConstants.START_PLAYER_AMOUNT, TestConstants.PLAYER_1);
+        RentableCell cell = new RentableCell(new RentableMemberbership[]{
+                new RentableMemberbership("", 500, 100)});
+        Board board = new Board(new Cell[]{ cell });
+        Bank bank = new Bank(TestConstants.INITIAL_AMOUNT_OF_BANK);
+
+        //when
+        board.purchaseCellAsset(cellPosition, player, bank);
+
+        //then
+        Set<PropertyAck> propertiesOwned = player.getPropertiesOwned();
+        Assert.assertEquals(1, propertiesOwned.size());
+        PropertyAck slip = propertiesOwned.iterator().next();
+        Assert.assertEquals("CELL_" + cellPosition, slip.getPropertyId());
+        Assert.assertEquals(purchaseAmount,slip.getPropertyValue());
+    }
 }

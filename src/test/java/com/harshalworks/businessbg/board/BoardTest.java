@@ -24,12 +24,13 @@
 package com.harshalworks.businessbg.board;
 
 import com.harshalworks.businessbg.TestConstants;
+import com.harshalworks.businessbg.bank.Bank;
 import com.harshalworks.businessbg.board.cell.BlankCell;
 import com.harshalworks.businessbg.board.cell.Cell;
 import com.harshalworks.businessbg.board.cell.RentableCell;
 import com.harshalworks.businessbg.board.cell.RentableMemberbership;
 import com.harshalworks.businessbg.exceptions.CannotInitializeBoardException;
-import com.harshalworks.businessbg.exceptions.CannotPurchaseThisCell;
+import com.harshalworks.businessbg.exceptions.CannotPurchaseThisAsset;
 import com.harshalworks.businessbg.exceptions.InvalidBoardPositionException;
 import com.harshalworks.businessbg.player.BoardGamePlayer;
 import com.harshalworks.businessbg.rules.Rule;
@@ -91,7 +92,7 @@ public class BoardTest {
         //expect invalid board position
     }
 
-    @Test(expected = CannotPurchaseThisCell.class)
+    @Test(expected = CannotPurchaseThisAsset.class)
     public void cannotPurchaseANonPurchaaseAbleCell(){
         //given
         Cell[] boardCells = new Cell[]{new BlankCell()};
@@ -99,7 +100,7 @@ public class BoardTest {
 
         //when
         int position = 0;
-        board.purchaseCellAsset(position, null);
+        board.purchaseCellAsset(position, null, null);
 
         //expect  cannot purcahse a blank cell.
     }
@@ -107,6 +108,7 @@ public class BoardTest {
     @Test
     public void boardCanSellCellsToMarketingAssistants(){
         //given
+        Bank seller = new Bank(TestConstants.INITIAL_AMOUNT_OF_BANK);
         RentableCell cell = new RentableCell(new RentableMemberbership[]{
                 new RentableMemberbership("",1000,100)
         });
@@ -117,7 +119,7 @@ public class BoardTest {
 
         //when
         int position = 0;
-        board.purchaseCellAsset(position, player);
+        board.purchaseCellAsset(position, player, seller);
 
         //then
         Assert.assertEquals(player, cell.getOwner());
