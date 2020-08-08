@@ -24,6 +24,7 @@
 package com.harshalworks.businessbg.board.cell;
 
 import com.harshalworks.businessbg.Game;
+import com.harshalworks.businessbg.TestGame;
 import com.harshalworks.businessbg.player.Player;
 import com.harshalworks.businessbg.TestConstants;
 import com.harshalworks.businessbg.board.Board;
@@ -36,7 +37,7 @@ public class CellTest {
     private Game game;
 
     private Player setupGameAndGetPlayer(Board board, int[] dice) {
-        game = new Game(TestConstants.START_PLAYER_AMOUNT,
+        game = new TestGame(TestConstants.START_PLAYER_AMOUNT,
                 TestConstants.INITIAL_AMOUNT_OF_BANK,
                 new MockFixedOutputDice(dice),
                 board);

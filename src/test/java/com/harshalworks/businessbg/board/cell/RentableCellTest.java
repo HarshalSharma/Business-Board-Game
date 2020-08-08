@@ -25,6 +25,7 @@ package com.harshalworks.businessbg.board.cell;
 
 import com.harshalworks.businessbg.Game;
 import com.harshalworks.businessbg.TestConstants;
+import com.harshalworks.businessbg.TestGame;
 import com.harshalworks.businessbg.bank.Bank;
 import com.harshalworks.businessbg.board.Board;
 import com.harshalworks.businessbg.dealers.Payee;
@@ -280,7 +281,7 @@ public class RentableCellTest {
                 {
                         new RentableMemberbership("",100,2)
                 });
-        Game game = new Game(TestConstants.START_PLAYER_AMOUNT,
+        Game game = new TestGame(TestConstants.START_PLAYER_AMOUNT,
                 TestConstants.INITIAL_AMOUNT_OF_BANK,
                 new MockFixedOutputDice(new int[]{1}), new Board(new Cell[]{
                         new BlankCell(), rentableCell}));

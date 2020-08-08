@@ -46,7 +46,7 @@ public class GameTest {
     @Before
     public void setup() {
         Cell[] cellPath = createBlankCellPath(10);
-        game = new Game(TestConstants.START_PLAYER_AMOUNT,
+        game = new TestGame(TestConstants.START_PLAYER_AMOUNT,
                 TestConstants.INITIAL_AMOUNT_OF_BANK,
                 new StandardSixSidedDice(),
                 new Board(cellPath));
@@ -142,7 +142,7 @@ public class GameTest {
         //given
         int BOARD_LENGTH = 16;
         int[] diceOutput = setupDiceOutput(10);
-        game = new Game(TestConstants.START_PLAYER_AMOUNT, TestConstants.INITIAL_AMOUNT_OF_BANK,
+        game = new TestGame(TestConstants.START_PLAYER_AMOUNT, TestConstants.INITIAL_AMOUNT_OF_BANK,
                 new MockFixedOutputDice(diceOutput), new Board(createBlankCellPath(BOARD_LENGTH)));
         Player player1 = game.registerPlayer(TestConstants.PLAYER_1);
         Player player2 = game.registerPlayer(TestConstants.PLAYER_2);
@@ -165,7 +165,7 @@ public class GameTest {
         int boardLength = 10;
         int[] diceOutput = setupDiceOutput(4);
         Dice customDice = new MockFixedOutputDice(diceOutput);
-        game = new Game(TestConstants.START_PLAYER_AMOUNT,
+        game = new TestGame(TestConstants.START_PLAYER_AMOUNT,
                 TestConstants.INITIAL_AMOUNT_OF_BANK,
                 customDice, new Board(createBlankCellPath(boardLength)));
         Player player1 = game.registerPlayer(TestConstants.PLAYER_1);
@@ -206,7 +206,7 @@ public class GameTest {
 
         //when
         game.start();
-        game.finish();
+        game.setFinished();
 
         //then
         game.start();
@@ -220,7 +220,7 @@ public class GameTest {
 
         //when
         game.start();
-        game.finish();
+        game.setFinished();
 
         //then
         game.makeMove(player);
