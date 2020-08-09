@@ -39,7 +39,7 @@ public class BoardCellDuplicatingFactoryTest {
     @Test(expected = CellTypeNotDefinedException.class)
     public void givenInvalidNameFactoryDontGenerateAnyCell(){
         //given
-        Map<String, Cell> map = new HashMap<>();
+        Map<StandardCellTypes, Cell> map = new HashMap<>();
         BoardCellDuplicatingFactory factory = new StandardBoardCellDuplicatingFactory(map);
 
         //when
@@ -50,11 +50,11 @@ public class BoardCellDuplicatingFactoryTest {
     @Test(expected = CellTypeNotDefinedException.class)
     public void givenValidNameButNoDefinationFactoryDontGenerateAnyCell(){
         //given
-        Map<String, Cell> map = new HashMap<>();
-        BoardCellDuplicatingFactory factory = new StandardBoardCellDuplicatingFactory(map);
+        Map<StandardCellTypes, Cell> map = new HashMap<>();
+        BoardCellDuplicatingFactory<StandardCellTypes> factory = new StandardBoardCellDuplicatingFactory(map);
 
         //when
-        factory.createCell(StandardCellTypes.BANK_REWARD.name());
+        factory.createCell(StandardCellTypes.BANK_REWARD);
         //assert exception.
     }
 
@@ -64,12 +64,12 @@ public class BoardCellDuplicatingFactoryTest {
         PayToBankCell payToBankCell = new PayToBankCell(100);
         BoardGamePlayer player = new BoardGamePlayer(TestConstants.START_PLAYER_AMOUNT, "");
         Bank bank = new Bank(TestConstants.INITIAL_AMOUNT_OF_BANK);
-        Map<String, Cell> map = new HashMap<>();
-        map.put(StandardCellTypes.PAY_TO_BANK.name(), payToBankCell);
-        BoardCellDuplicatingFactory factory = new StandardBoardCellDuplicatingFactory(map);
+        Map<StandardCellTypes, Cell> map = new HashMap<>();
+        map.put(StandardCellTypes.PAY_TO_BANK, payToBankCell);
+        BoardCellDuplicatingFactory<StandardCellTypes> factory = new StandardBoardCellDuplicatingFactory(map);
         
         //when
-        Cell pay_to_bank = factory.createCell(StandardCellTypes.PAY_TO_BANK.name());
+        Cell pay_to_bank = factory.createCell(StandardCellTypes.PAY_TO_BANK);
         pay_to_bank.execute(player, bank);
 
         //then
@@ -85,12 +85,12 @@ public class BoardCellDuplicatingFactoryTest {
                 new RentableMemberbership[]{new RentableMemberbership("Test",100,10)}
         );
         BoardGamePlayer player = new BoardGamePlayer(TestConstants.START_PLAYER_AMOUNT, "");
-        Map<String, Cell> map = new HashMap<>();
-        map.put(StandardCellTypes.RENT_ABLE.name(), rentableCell);
-        BoardCellDuplicatingFactory factory = new StandardBoardCellDuplicatingFactory(map);
+        Map<StandardCellTypes, Cell> map = new HashMap<>();
+        map.put(StandardCellTypes.RENT_ABLE, rentableCell);
+        BoardCellDuplicatingFactory<StandardCellTypes> factory = new StandardBoardCellDuplicatingFactory(map);
 
         //when
-        Cell rent_able_cell = factory.createCell(StandardCellTypes.RENT_ABLE.name());
+        Cell rent_able_cell = factory.createCell(StandardCellTypes.RENT_ABLE);
         ((RentableCell) rent_able_cell).purchase(player);
 
         //then
@@ -106,12 +106,12 @@ public class BoardCellDuplicatingFactoryTest {
         BankRewardCell bankRewardCell = new BankRewardCell(200);
         BoardGamePlayer player = new BoardGamePlayer(TestConstants.START_PLAYER_AMOUNT, "");
         Bank bank = new Bank(TestConstants.INITIAL_AMOUNT_OF_BANK);
-        Map<String, Cell> map = new HashMap<>();
-        map.put(StandardCellTypes.BANK_REWARD.name(), bankRewardCell);
-        BoardCellDuplicatingFactory factory = new StandardBoardCellDuplicatingFactory(map);
+        Map<StandardCellTypes, Cell> map = new HashMap<>();
+        map.put(StandardCellTypes.BANK_REWARD, bankRewardCell);
+        BoardCellDuplicatingFactory<StandardCellTypes> factory = new StandardBoardCellDuplicatingFactory(map);
 
         //when
-        Cell bank_reward_cell = factory.createCell(StandardCellTypes.BANK_REWARD.name());
+        Cell bank_reward_cell = factory.createCell(StandardCellTypes.BANK_REWARD);
         bank_reward_cell.execute(player, bank);
 
         //then
@@ -123,13 +123,13 @@ public class BoardCellDuplicatingFactoryTest {
     @Test
     public void blankCellsCouldBeCreatedAsWellWithGivenType(){
         //given
-        Map<String, Cell> map = new HashMap<>();
+        Map<StandardCellTypes, Cell> map = new HashMap<>();
         BlankCell blankCell = new BlankCell();
-        map.put(StandardCellTypes.BLANK.name(), blankCell);
-        BoardCellDuplicatingFactory factory = new StandardBoardCellDuplicatingFactory(map);
+        map.put(StandardCellTypes.BLANK, blankCell);
+        BoardCellDuplicatingFactory<StandardCellTypes> factory = new StandardBoardCellDuplicatingFactory(map);
 
         //when
-        Cell cell = factory.createCell(StandardCellTypes.BLANK.name());
+        Cell cell = factory.createCell(StandardCellTypes.BLANK);
 
         //then
         Assert.assertNotEquals(cell, blankCell);

@@ -47,21 +47,6 @@ public class RentableCellTest {
     }
 
     @Test
-    public void rentableCellsCanHaveOwnerIfPurchased() {
-        //given
-        BoardGamePlayer player = new BoardGamePlayer(TestConstants.START_PLAYER_AMOUNT, TestConstants.PLAYER_1);
-        RentableCell cell = new RentableCell(new RentableMemberbership[]{
-                new RentableMemberbership("", 500, 100)});
-        //when
-        Board board = new Board(new Cell[]{ cell });
-        board.purchaseCellAsset(0, player, bank);
-
-        //then
-        Payee owner = cell.getOwner();
-        Assert.assertEquals(player, owner);
-    }
-
-    @Test
     public void purchasingACellWouldRequireMoneyToBeSpentAndAddedToBank() {
         //given
         int purchaseAmount = 500;
@@ -78,6 +63,21 @@ public class RentableCellTest {
         Assert.assertEquals(TestConstants.START_PLAYER_AMOUNT -  purchaseAmount,player.getMoneyValue());
         Assert.assertEquals(TestConstants.INITIAL_AMOUNT_OF_BANK +  purchaseAmount,bank.getAvailableAmount());
 
+    }
+
+    @Test
+    public void rentableCellsCanHaveOwnerIfPurchased() {
+        //given
+        BoardGamePlayer player = new BoardGamePlayer(TestConstants.START_PLAYER_AMOUNT, TestConstants.PLAYER_1);
+        RentableCell cell = new RentableCell(new RentableMemberbership[]{
+                new RentableMemberbership("", 500, 100)});
+        //when
+        Board board = new Board(new Cell[]{ cell });
+        board.purchaseCellAsset(0, player, bank);
+
+        //then
+        Payee owner = cell.getOwner();
+        Assert.assertEquals(player, owner);
     }
 
     @Test
@@ -160,6 +160,27 @@ public class RentableCellTest {
         Assert.assertEquals(TestConstants.INITIAL_AMOUNT_OF_BANK + initialCost + upgradeCost,
                 bank.getAvailableAmount());
     }
+
+    @Test
+    public void onUpgradingRentableCellPropertyAckValueShouldReflectNewValue() {
+        //given
+        int initialCost = 500;
+        int upgradeCost = 500;
+        RentableCell cell = new RentableCell(new RentableMemberbership[]{
+                new RentableMemberbership("", initialCost, 100),
+                new RentableMemberbership("", initialCost + upgradeCost, 200)});
+        BoardGamePlayer player = new BoardGamePlayer(TestConstants.START_PLAYER_AMOUNT, TestConstants.PLAYER_1);
+
+        //when
+        Board board = new Board(new Cell[]{ cell });
+        board.purchaseCellAsset(0, player, bank);
+        board.purchaseCellAsset(0, player, bank);
+
+        //then
+        Assert.assertEquals(initialCost + upgradeCost,
+                player.getTotalAssetValue());
+    }
+
 
     @Test
     public void rentCouldBeIncreasedByUpgradingMembership(){
@@ -304,5 +325,24 @@ public class RentableCellTest {
         Assert.assertEquals(1, player.getCurrentPosition());
         Assert.assertEquals(TestConstants.START_PLAYER_AMOUNT - 100, player.getMoneyValue());
         Assert.assertEquals(player, rentableCell.getOwner());
+    }
+
+    @Test
+    public void playerDoesntNeedToPayRentToThemselvesWhenTheyLandOnItAgain(){
+        //given
+        int rent = 100;
+        RentableCell cell = new RentableCell(new RentableMemberbership[]{
+                new RentableMemberbership("",500, rent)});
+        BoardGamePlayer player1 = new BoardGamePlayer(TestConstants.START_PLAYER_AMOUNT,
+                TestConstants.PLAYER_1);
+        Board board = new Board(new Cell[]{ cell });
+        board.purchaseCellAsset(0, player1, bank);
+        int initial = player1.getMoneyValue();
+
+        //when
+        cell.execute(player1,null);
+
+        //then
+        Assert.assertEquals(initial, player1.getMoneyValue());
     }
 }

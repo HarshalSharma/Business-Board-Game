@@ -27,8 +27,11 @@ import com.harshalworks.businessbg.dealers.MarketAssistant;
 
 public interface Asset {
 
+    boolean isPurchasable(MarketAssistant buyer);
+
     void purchase(MarketAssistant buyer);
 
-    int getCost();
+    int getPurchaseCost();
 
+    int getMonetaryValue();
 }

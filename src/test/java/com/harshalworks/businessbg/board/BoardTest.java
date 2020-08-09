@@ -38,6 +38,19 @@ import org.junit.Assert;
 import org.junit.Test;
 
 public class BoardTest {
+    @Test(expected = CannotPurchaseThisAsset.class)
+    public void cannotPurchaseANonPurchaaseAbleCell(){
+        //given
+        Cell[] boardCells = new Cell[]{new BlankCell()};
+        Board board = new Board(boardCells);
+
+        //when
+        int position = 0;
+        board.purchaseCellAsset(position, null, null);
+
+        //expect  cannot purcahse a blank cell.
+    }
+
 
     @Test(expected = CannotInitializeBoardException.class)
     public void boardShouldBeInitializedWithNonZeroLength() {
@@ -92,19 +105,6 @@ public class BoardTest {
         //expect invalid board position
     }
 
-    @Test(expected = CannotPurchaseThisAsset.class)
-    public void cannotPurchaseANonPurchaaseAbleCell(){
-        //given
-        Cell[] boardCells = new Cell[]{new BlankCell()};
-        Board board = new Board(boardCells);
-
-        //when
-        int position = 0;
-        board.purchaseCellAsset(position, null, null);
-
-        //expect  cannot purcahse a blank cell.
-    }
-
     @Test
     public void boardCanSellCellsToMarketingAssistants(){
         //given
@@ -125,4 +125,31 @@ public class BoardTest {
         Assert.assertEquals(player, cell.getOwner());
     }
 
+    @Test
+    public void boardCanOnlySellAssetIfNotAlreadyAcquired(){
+        Bank seller = new Bank(TestConstants.INITIAL_AMOUNT_OF_BANK);
+        RentableCell cell = new RentableCell(new RentableMemberbership[]{
+                new RentableMemberbership("",1000,100)
+        });
+        Cell[] boardCells = new Cell[]{cell};
+        Board board = new Board(boardCells);
+        BoardGamePlayer player1 = new BoardGamePlayer(TestConstants.START_PLAYER_AMOUNT,
+                TestConstants.PLAYER_1);
+        BoardGamePlayer player2 = new BoardGamePlayer(TestConstants.START_PLAYER_AMOUNT,
+                TestConstants.PLAYER_2);
+
+        //when
+        int position = 0;
+        board.purchaseCellAsset(position, player1, seller);
+        try{
+            board.purchaseCellAsset(position, player2, seller);
+        }catch (Exception e){
+            Assert.assertTrue(e instanceof CannotPurchaseThisAsset);
+        }
+
+        //then
+        Assert.assertEquals(TestConstants.START_PLAYER_AMOUNT, player2.getMoneyValue());
+        Assert.assertEquals(TestConstants.START_PLAYER_AMOUNT - 1000, player1.getMoneyValue());
+
+    }
 }

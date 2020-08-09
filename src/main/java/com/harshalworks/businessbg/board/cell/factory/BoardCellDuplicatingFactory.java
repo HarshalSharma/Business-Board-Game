@@ -30,25 +30,25 @@ import com.harshalworks.businessbg.exceptions.ExceptionMessageConstants;
 
 import java.util.Map;
 
-public abstract class BoardCellDuplicatingFactory {
+public abstract class BoardCellDuplicatingFactory<T> {
 
-    private Map<String, Cell> cellReference;
+    private Map<T, Cell> cellReference;
 
-    public BoardCellDuplicatingFactory(Map<String, Cell> cellReference) {
+    public BoardCellDuplicatingFactory(Map<T, Cell> cellReference) {
         this.cellReference = cellReference;
     }
 
-    public Cell createCell(String cellType) {
+    public Cell createCell(T cellType) {
         if (isBlankCell(cellType)) return new BlankCell();
         Cell cell = cellReference.get(cellType);
         if(cell == null)
-            throw new CellTypeNotDefinedException(ExceptionMessageConstants.NO_CELL_TYPE_DEFINED);
+            throw new CellTypeNotDefinedException(cellType.toString());
         return duplicateCell(cell, cellType);
     }
 
-    protected abstract Cell duplicateCell(Cell cell, String cellType);
+    protected abstract Cell duplicateCell(Cell cell, T cellType);
 
-    protected boolean isBlankCell(String cell) {
-        return cell == null || cell.equals("");
+    protected boolean isBlankCell(T cell) {
+        return cell == null;
     }
 }

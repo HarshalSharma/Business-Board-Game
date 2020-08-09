@@ -27,15 +27,15 @@ import com.harshalworks.businessbg.board.cell.*;
 
 import java.util.Map;
 
-public class StandardBoardCellDuplicatingFactory extends BoardCellDuplicatingFactory {
+public class StandardBoardCellDuplicatingFactory extends BoardCellDuplicatingFactory<StandardCellTypes> {
 
-    public StandardBoardCellDuplicatingFactory(Map<String, Cell> cellReference) {
+    public StandardBoardCellDuplicatingFactory(Map<StandardCellTypes, Cell> cellReference) {
         super(cellReference);
     }
 
     @Override
-    protected Cell duplicateCell(Cell cell, String cellType) {
-        switch (StandardCellTypes.valueOf(cellType)){
+    protected Cell duplicateCell(Cell cell, StandardCellTypes cellType) {
+        switch (cellType){
             case PAY_TO_BANK:
                 return new PayToBankCell((PayToBankCell) cell);
             case BANK_REWARD:
