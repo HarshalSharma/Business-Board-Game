@@ -2,8 +2,8 @@ plugins {
     id 'java'
 }
 
-group 'com.harshalworks'
-version '1.0-SNAPSHOT'
+group 'com.harshalworks.businessbg'
+version '1.0.0'
 
 repositories {
     mavenCentral()
