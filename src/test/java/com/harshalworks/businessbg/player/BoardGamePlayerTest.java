@@ -29,7 +29,6 @@ import com.harshalworks.businessbg.board.Board;
 import com.harshalworks.businessbg.board.cell.Cell;
 import com.harshalworks.businessbg.board.cell.RentableCell;
 import com.harshalworks.businessbg.board.cell.RentableMemberbership;
-import com.harshalworks.businessbg.dealers.Payee;
 import com.harshalworks.businessbg.dealers.PropertyAck;
 import org.junit.Assert;
 import org.junit.Test;

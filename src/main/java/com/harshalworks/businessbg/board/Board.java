@@ -44,7 +44,7 @@ public class Board {
     }
 
     private void validateBoardLengthIsNonZero(Cell[] cells) {
-        if(cells == null || cells.length == 0)
+        if (cells == null || cells.length == 0)
             throw new CannotInitializeBoardException(ExceptionMessageConstants.GIVEN_BOARD_LENGTH_IS_ZERO);
     }
 
@@ -60,36 +60,40 @@ public class Board {
      */
     public Rule getRule(int position) {
         Rule rule;
-        try{
+        try {
             rule = boardPath[position];
-        }catch (ArrayIndexOutOfBoundsException e){
+        } catch (ArrayIndexOutOfBoundsException e) {
             throw new InvalidBoardPositionException(position, boardPath.length);
         }
 
-        if(rule == null)
+        if (rule == null)
             return new BlankCell();
 
         return rule;
     }
 
     public void purchaseCellAsset(int position, MarketAssistant buyer, MarketAssistant seller) {
-        isCellAssetPurchaseable(position);
+        validateIfCellIsAnAsset(position);
         RentableCell cell = (RentableCell) boardPath[position];
         makeTransaction(position, buyer, seller, cell);
     }
 
-    protected void makeTransaction(int position, MarketAssistant buyer, MarketAssistant seller, Asset cell) {
-        int netCost = cell.getCost();
-        if(!buyer.haveAvailableAmount(netCost))
+    protected void makeTransaction(int position, MarketAssistant buyer, MarketAssistant seller, Asset asset) {
+        if (!asset.isPurchasable(buyer))
+            throw new CannotPurchaseThisAsset("Purchase/Upgrade not allowed.");
+
+        int netCost = asset.getPurchaseCost();
+        if (!buyer.haveAvailableAmount(netCost))
             throw new CannotPurchaseThisAsset("Insufficient Amount!");
+
         buyer.deductMoney(netCost);
         seller.addMoney(netCost);
-        cell.purchase(buyer);
-        buyer.addProperty(new PropertyAck("CELL_" + position, netCost));
+        asset.purchase(buyer);
+        buyer.addProperty(new PropertyAck("CELL_" + position, asset.getMonetaryValue()));
     }
 
-    private void isCellAssetPurchaseable(int position) {
-        if(!(boardPath[position] instanceof Asset))
+    private void validateIfCellIsAnAsset(int position) {
+        if (!(boardPath[position] instanceof Asset))
             throw new CannotPurchaseThisAsset("Not Purchasable cell asset.");
     }
 }

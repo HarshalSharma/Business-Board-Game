@@ -33,7 +33,7 @@ public class RentableCell extends Cell implements Asset {
 
     private MarketAssistant owner;
     private final RentableMemberbership[] rentableMemberberships;
-    private int membershipStatus = -1;
+    private int membershipStatus;
 
     public RentableCell(RentableMemberbership[] memberberships) {
         this.rentableMemberberships = memberberships;
@@ -57,6 +57,8 @@ public class RentableCell extends Cell implements Asset {
     }
 
     protected void payRent(BoardGamePlayer player) {
+        if(player == owner)
+            return;
         int rent = rentableMemberberships[membershipStatus].getRent();
         owner.addMoney(rent);
         player.deductMoney(rent);
@@ -68,8 +70,6 @@ public class RentableCell extends Cell implements Asset {
 
     @Override
     public void purchase(MarketAssistant customer) {
-        if(this.owner != null && customer != owner)
-            throw new CannotPurchaseThisAsset("Purchase/Upgrade not allowed.");
         if(this.owner == null) {
             this.owner = customer;
             membershipStatus = 0;
@@ -78,13 +78,18 @@ public class RentableCell extends Cell implements Asset {
         upgradeMembership();
     }
 
+    @Override
+    public boolean isPurchasable(MarketAssistant customer) {
+        return !(this.owner != null && customer != owner);
+    }
+
     protected void upgradeMembership() {
         checkIfUpgradePossible();
         membershipStatus++;
     }
 
     @Override
-    public int getCost() {
+    public int getPurchaseCost() {
         if(owner == null)
             return rentableMemberberships[0].getCost();
 
@@ -94,10 +99,14 @@ public class RentableCell extends Cell implements Asset {
                 - rentableMemberberships[membershipStatus].getCost();
     }
 
-    protected boolean checkIfUpgradePossible() {
+    @Override
+    public int getMonetaryValue() {
+        return rentableMemberberships[membershipStatus].getCost();
+    }
+
+    protected void checkIfUpgradePossible() {
         if(membershipStatus + 1 >= rentableMemberberships.length)
             throw new CannotPurchaseThisAsset("No more memberships available");
-        return true;
     }
 
     public RentableMemberbership getMembershipStatus() {
