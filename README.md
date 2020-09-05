@@ -60,6 +60,7 @@ Basic usage:
 FixedRoundsGame game = new FixedRoundsGame(START_PLAYER_AMOUNT, INITIAL_AMOUNT_OF_BANK, 
                                                             DICE, BOARDS, ROUNDS_TO_PLAY);
 ```
+  This is just an example, Game creation could have been done through Builders or something better, and we do recommend to use builders to create different games in a high level project.
 
 2. Register players who want to play with unique names (minimum 2).
 
